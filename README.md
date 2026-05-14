@@ -182,9 +182,9 @@ Open `frontend/index.html` using [Live Server](https://marketplace.visualstudio.
 
 ## 👤 Author
 
-**Mohit Shekhawat**  
+**Mohit Singh**  
 Full-Stack Developer
 
 ---
 
-<div align="center">Made with ❤️ for pets everywhere 🐾</div>
+<div align="center">Made with love for pets everywhere 🐾</div>
