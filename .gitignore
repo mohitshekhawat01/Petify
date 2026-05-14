@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Environment variables — NEVER push secrets to GitHub
+.env
+.env.local
+.env.production
+
+# Uploads (user files)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.suo
+*.user

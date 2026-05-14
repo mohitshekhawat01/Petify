@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <title>Page Not Found – Petify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brown: #4a2810; --gold: #c9973a; --ivory: #fdf9f3;
+            --ivory2: #f7f1e8; --text-muted: #8c7a6b;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, #0f0603 0%, #2d1205 50%, #1a0a02 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 10px; height: 10px;
+            background: var(--gold); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        .cursor-ring {
+            width: 36px; height: 36px;
+            border: 2px solid rgba(201,151,58,0.5); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9998;
+            transition: left 0.12s ease, top 0.12s ease;
+        }
+
+        /* Floating paw prints background */
+        .paw-bg {
+            position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+        }
+        .paw-float {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.04;
+            animation: floatPaw linear infinite;
+        }
+        @keyframes floatPaw {
+            0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10%  { opacity: 0.04; }
+            90%  { opacity: 0.04; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .page-wrap {
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .big-404 {
+            font-family: var(--font-serif);
+            font-size: clamp(100px, 20vw, 180px);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #e8b85a, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 10px;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(201,151,58,0.3)); }
+            to   { filter: drop-shadow(0 0 50px rgba(201,151,58,0.6)); }
+        }
+
+        .paw-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-12px); }
+        }
+
+        .err-title {
+            font-family: var(--font-serif);
+            font-size: clamp(26px, 5vw, 40px);
+            color: #fff;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .err-msg {
+            font-size: 15px;
+            color: rgba(255,255,255,0.45);
+            max-width: 400px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-gold {
+            padding: 13px 32px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--gold), #e8b85a);
+            color: var(--brown);
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.25s, box-shadow 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(201,151,58,0.4);
+        }
+        .btn-outline {
+            padding: 13px 32px;
+            border-radius: 999px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            border: 1.5px solid rgba(201,151,58,0.35);
+            cursor: none;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .quick-links {
+            margin-top: 50px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            color: rgba(255,255,255,0.25);
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .quick-link:hover { color: var(--gold); }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <!-- Floating paw bg -->
+    <div class="paw-bg" id="paw-bg"></div>
+
+    <div class="page-wrap">
+        <div class="big-404">404</div>
+        <span class="paw-icon">🐾</span>
+        <h1 class="err-title">Uh oh, the trail went cold!</h1>
+        <p class="err-msg">The page you're looking for has wandered off. Maybe it's playing fetch somewhere else.</p>
+        <div class="btn-row">
+            <a href="index.html" class="btn-gold">Back to Home</a>
+            <a href="products.html" class="btn-outline">Browse Products</a>
+        </div>
+        <div class="quick-links">
+            <a href="login.html" class="quick-link">Login</a>
+            <a href="profile.html" class="quick-link">My Profile</a>
+            <a href="about.html" class="quick-link">About</a>
+            <a href="blog.html" class="quick-link">Blog</a>
+        </div>
+    </div>
+
+    <script src="js/cursor.js"></script>
+    <script>
+        // Generate floating paw prints
+        const bg = document.getElementById('paw-bg');
+        for (let i = 0; i < 18; i++) {
+            const p = document.createElement('div');
+            p.className = 'paw-float';
+            p.textContent = '🐾';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 20 + 15) + 's';
+            p.style.animationDelay    = (Math.random() * 15) + 's';
+            p.style.fontSize = (Math.random() * 30 + 20) + 'px';
+            bg.appendChild(p);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Petify 🐾</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <meta name="description" content="The story behind Petify — India's most luxurious pet boutique. Built by pet lovers, for pet lovers.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── About Hero ── */
+        .about-hero {
+            background: linear-gradient(160deg, #1a0a03 0%, #2d1205 50%, #4a2810 100%);
+            min-height: 80vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 140px 40px 100px; position: relative; overflow: hidden;
+        }
+        .about-hero::before {
+            content: '🐾'; position: absolute; font-size: 600px; opacity: 0.03;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            pointer-events: none; line-height: 1;
+        }
+        .about-hero-eyebrow {
+            font-size: 12px; text-transform: uppercase; letter-spacing: 4px;
+            color: var(--gold); margin-bottom: 20px; display: flex; align-items: center;
+            justify-content: center; gap: 14px;
+        }
+        .about-hero-eyebrow span { display: block; width: 40px; height: 1px; background: var(--gold); }
+        .about-hero h1 {
+            font-family: var(--font-serif); font-size: clamp(52px, 8vw, 96px);
+            color: #fff; line-height: 1.05; margin-bottom: 28px;
+        }
+        .about-hero h1 em { color: var(--gold); font-style: italic; font-weight: 300; }
+        .about-hero p {
+            max-width: 580px; margin: 0 auto 40px; color: rgba(255,255,255,0.65);
+            font-size: 18px; line-height: 1.8; font-weight: 300;
+        }
+        .scroll-indicator {
+            position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .scroll-dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+            animation: scrollBounce 1.6s ease-in-out infinite;
+        }
+        @keyframes scrollBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+        /* ── Stats ── */
+        .stats-strip {
+            background: var(--brown); padding: 60px 40px;
+            display: grid; grid-template-columns: repeat(4,1fr); gap: 20px;
+            max-width: 100%;
+        }
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-family: var(--font-serif); font-size: 52px; color: var(--gold);
+            font-weight: 600; line-height: 1;
+        }
+        .stat-label { font-size: 13px; color: rgba(255,255,255,0.55); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 8px; }
+
+        /* ── Section ── */
+        .about-section { max-width: 1200px; margin: 0 auto; padding: 100px 40px; }
+        .about-section.dark { background: #0f0603; max-width: 100%; padding: 100px 40px; }
+        .about-section.dark .section-inner { max-width: 1200px; margin: 0 auto; }
+
+        /* ── Story 2-col ── */
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .story-img-wrap {
+            border-radius: 24px; overflow: hidden; position: relative;
+            background: var(--brown); aspect-ratio: 4/5;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .story-img-inner {
+            font-size: 120px; opacity: 0.5;
+            animation: floatEmoji 5s ease-in-out infinite;
+        }
+        @keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+        .story-img-wrap::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(74,40,16,0.5) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .story-text .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: var(--gold); margin-bottom: 18px; }
+        .story-text h2 { font-family: var(--font-serif); font-size: 48px; color: var(--brown); margin-bottom: 24px; line-height: 1.1; }
+        .story-text p { color: var(--text-muted); line-height: 1.9; margin-bottom: 18px; font-size: 16px; }
+        .gold-quote {
+            border-left: 3px solid var(--gold); padding-left: 20px; margin: 32px 0;
+            font-family: var(--font-serif); font-size: 22px; color: var(--brown);
+            font-style: italic; line-height: 1.5;
+        }
+
+        /* ── Values ── */
+        .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 60px; }
+        .value-card {
+            background: var(--white); border: 1px solid var(--ivory3);
+            border-radius: 20px; padding: 36px 30px;
+            transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .value-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--brown));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+        }
+        .value-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); border-color: var(--ivory3); }
+        .value-card:hover::before { transform: scaleX(1); }
+        .value-icon { font-size: 36px; margin-bottom: 18px; }
+        .value-card h3 { font-family: var(--font-serif); font-size: 24px; color: var(--brown); margin-bottom: 12px; }
+        .value-card p { color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+
+        /* ── Timeline ── */
+        .timeline { position: relative; margin-top: 60px; }
+        .timeline::before {
+            content:''; position:absolute; left:50%; top:0; bottom:0;
+            width:2px; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            transform: translateX(-50%);
+        }
+        .tl-item {
+            display: grid; grid-template-columns: 1fr 60px 1fr; gap: 20px;
+            align-items: center; margin-bottom: 60px;
+        }
+        .tl-item:nth-child(odd) .tl-content { grid-column: 1; text-align: right; }
+        .tl-item:nth-child(odd) .tl-empty { grid-column: 3; }
+        .tl-item:nth-child(even) .tl-empty { grid-column: 1; }
+        .tl-item:nth-child(even) .tl-content { grid-column: 3; }
+        .tl-dot {
+            grid-column: 2; width: 44px; height: 44px; border-radius: 50%;
+            background: var(--brown); border: 3px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; margin: 0 auto; box-shadow: 0 0 0 6px rgba(201,151,58,0.1);
+        }
+        .tl-year { font-family: var(--font-serif); font-size: 36px; color: var(--gold); margin-bottom: 8px; }
+        .tl-content h3 { font-family: var(--font-serif); font-size: 22px; color: var(--brown); margin-bottom: 8px; }
+        .tl-content p { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+
+        /* ── Team ── */
+        .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; margin-top: 60px; }
+        .team-card {
+            background: var(--white); border-radius: 24px; overflow: hidden;
+            border: 1px solid var(--ivory3); transition: all 0.3s;
+        }
+        .team-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(74,40,16,0.1); }
+        .team-avatar {
+            background: linear-gradient(135deg, var(--brown) 0%, #7a3810 100%);
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            font-size: 72px;
+        }
+        .team-info { padding: 24px; }
+        .team-info h3 { font-family: var(--font-serif); font-size: 24px; color: var(--brown); margin-bottom: 4px; }
+        .team-role { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 12px; }
+        .team-info p { color: var(--text-muted); font-size: 13px; line-height: 1.7; }
+
+        /* ── CTA ── */
+        .about-cta {
+            text-align: center; padding: 100px 40px;
+            background: linear-gradient(135deg, var(--brown), #1a0a03);
+        }
+        .about-cta h2 { font-family: var(--font-serif); font-size: 56px; color: #fff; margin-bottom: 20px; }
+        .about-cta h2 em { color: var(--gold); font-style: italic; }
+        .about-cta p { color: rgba(255,255,255,0.6); margin-bottom: 40px; font-size: 17px; }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #e8b85a);
+            color: var(--brown); padding: 16px 40px; border-radius: 30px;
+            font-weight: 700; font-size: 15px; letter-spacing: 0.5px;
+            transition: all 0.3s; display: inline-block;
+        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(201,151,58,0.4); }
+
+        /* ── Section Headers ── */
+        .section-eyebrow-gold { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: var(--gold); margin-bottom: 14px; }
+        .section-h2 { font-family: var(--font-serif); font-size: clamp(36px, 4vw, 52px); color: var(--brown); margin-bottom: 16px; }
+        .section-h2.white { color: #fff; }
+        .section-sub { color: var(--text-muted); font-size: 16px; max-width: 560px; line-height: 1.8; }
+        .section-sub.white { color: rgba(255,255,255,0.55); }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar transparent" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🐾</span>
+                <span class="logo-text">Petify</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Shop</a>
+                <a href="about.html" class="active" style="color:var(--gold);">About</a>
+                <a href="blog.html">Blog</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" id="nav-auth-btn" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:20px;border:1.5px solid var(--gold);color:var(--gold);font-size:13px;font-weight:600;transition:all .25s;text-decoration:none;background:rgba(201,151,58,0.07);">👤 Login / Sign Up</a>
+                <button class="cart-pill-btn" id="open-cart-btn" onclick="document.getElementById('cart-overlay').classList.add('active');document.getElementById('cart-drawer').classList.add('active');">
+                    <span>🛒 Cart</span>
+                    <div class="cart-badge" id="cart-count">0</div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="toast-container"></div>
+
+    <!-- HERO -->
+    <section class="about-hero">
+        <div>
+            <div class="about-hero-eyebrow"><span></span> Our Story <span></span></div>
+            <h1>Born from a <em>Love</em><br>for Every Paw</h1>
+            <p>We started Petify because our own pets deserved better — better food, better accessories, and a brand that truly understood what pet parenthood means.</p>
+            <a href="products.html" class="btn-gold">Explore Our Collection →</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-dot"></div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-strip">
+        <div class="stat-item">
+            <div class="stat-num">15K+</div>
+            <div class="stat-label">Happy Pets</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">100K+</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Curated Products</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">4.9★</div>
+            <div class="stat-label">Average Rating</div>
+        </div>
+    </div>
+
+    <!-- OUR STORY -->
+    <section class="about-section fade-up">
+        <div class="story-grid">
+            <div class="story-img-wrap" style="background:#1a0a03; position:relative; overflow:hidden; border-radius:24px; aspect-ratio:4/5;">
+                <img src="images/beagle-avatar.png" alt="Duffy the Beagle — Petify's inspiration"
+                    style="width:100%; height:100%; object-fit:cover; object-position:center top; display:block;">
+                <div style="position:absolute; bottom:0; left:0; right:0;
+                    background:linear-gradient(to top, rgba(10,4,0,0.85) 0%, transparent 70%);
+                    padding:24px 22px; z-index:2;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="width:36px; height:36px; border-radius:50%; background:var(--gold);
+                            display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;">🐾</div>
+                        <div>
+                            <div style="color:#fff; font-size:14px; font-weight:600; letter-spacing:0.3px;">Duffy</div>
+                            <div style="color:rgba(255,255,255,0.55); font-size:11px; text-transform:uppercase; letter-spacing:1.5px;">The Beagle Behind Petify</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-text">
+                <div class="eyebrow">How It Began</div>
+                <h2>A Beagle Named Duffy Changed Everything</h2>
+                <p>In 2024, our founder Mohit was searching for truly premium food for his beagle Duffy. Every store carried the same generic options. Nothing felt good enough.</p>
+                <p>So he built Petify — a platform where every single product is hand-selected, vet-reviewed, and worth your trust. No compromises, no fillers, no shortcuts.</p>
+                <blockquote class="gold-quote">"If I wouldn't give it to Duffy, it doesn't go on our shelves."</blockquote>
+                <p>Today, Petify is India's most trusted luxury pet boutique — serving over 15,000 pet families across every city.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section style="background: var(--ivory2); padding: 100px 40px;">
+        <div style="max-width:1200px; margin:0 auto;" class="fade-up">
+            <div style="text-align:center; margin-bottom:16px;" class="section-eyebrow-gold">What We Stand For</div>
+            <h2 class="section-h2" style="text-align:center;">Our Core <span class="italic-gold">Values</span></h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🩺</div>
+                    <h3>Vet-Approved Always</h3>
+                    <p>Every product on Petify is reviewed and approved by certified veterinarians. Your pet's health is never a marketing claim — it's our baseline.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🌿</div>
+                    <h3>100% Natural Ingredients</h3>
+                    <p>No artificial preservatives, no hidden fillers. We work directly with ethical suppliers who share our belief that pets deserve clean, honest nutrition.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💛</div>
+                    <h3>Luxury Without Guilt</h3>
+                    <p>Premium quality shouldn't cost the earth. We price fairly, ship free above ₹999, and make luxury accessible to every pet parent in India.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🔄</div>
+                    <h3>Hassle-Free Returns</h3>
+                    <p>If your pet doesn't love it, we don't want you to keep it. Our 30-day no-questions-asked return policy is as real as it sounds.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Community First</h3>
+                    <p>We partner with animal shelters across India, donating 2% of every order to rescue and rehabilitation programs for stray animals.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🚀</div>
+                    <h3>Pan-India Delivery</h3>
+                    <p>From Kashmir to Kanyakumari — fast, insured, and carefully packed deliveries so every order arrives exactly as it should.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="about-section fade-up">
+        <div style="text-align:center; margin-bottom:60px;">
+            <div class="section-eyebrow-gold">Our Journey</div>
+            <h2 class="section-h2">From Dream to <span class="italic-gold">Reality</span></h2>
+        </div>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-content">
+                    <div class="tl-year">2024</div>
+                    <h3>The Idea Is Born</h3>
+                    <p>Frustrated by poor-quality pet products in India, Rishabh starts researching what truly premium pet care looks like globally.</p>
+                </div>
+                <div class="tl-dot">🌱</div>
+                <div class="tl-empty"></div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-empty"></div>
+                <div class="tl-dot">🐾</div>
+                <div class="tl-content">
+                    <div class="tl-year">2024</div>
+                    <h3>Petify Launches</h3>
+                    <p>Our first 50 products go live. Within 3 months we have 1,000 happy customers and a waitlist of 500 more.</p>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-content">
+                    <div class="tl-year">2025</div>
+                    <h3>Vet Network Established</h3>
+                    <p>We partner with 30+ veterinarians across India to create our rigorous product review board. Every single product earns its place.</p>
+                </div>
+                <div class="tl-dot">🩺</div>
+                <div class="tl-empty"></div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-empty"></div>
+                <div class="tl-dot">🏆</div>
+                <div class="tl-content">
+                    <div class="tl-year">2026</div>
+                    <h3>India's #1 Pet Boutique</h3>
+                    <p>Recognized as India's most trusted luxury pet platform with 15,000+ happy families, 500+ products, and a 4.9★ average rating.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section style="background: var(--ivory2); padding: 100px 40px;" class="fade-up">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:60px;">
+                <div class="section-eyebrow-gold">The People Behind the Paws</div>
+                <h2 class="section-h2">Meet the <span class="italic-gold">Team</span></h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👨🏽</div>
+                    <div class="team-info">
+                        <h3>Mohit Singh</h3>
+                        <div class="team-role">Founder & CEO</div>
+                        <p>Beagle dad, product obsessive, and the reason Petify exists. Rishabh has spent 3 years curating only the absolute best for India's pets.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👩🏽</div>
+                    <div class="team-info">
+                        <h3>Dr. Rakhi Bisht</h3>
+                        <div class="team-role">Chief Veterinary Officer</div>
+                        <p>With 12 years of experience, Dr. Priya leads our vet review board ensuring every product meets the highest safety and nutrition standards.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">👨🏻</div>
+                    <div class="team-info">
+                        <h3>Mohit Sati</h3>
+                        <div class="team-role">Head of Product Curation</div>
+                        <p>Cat guardian of two and ex-luxury retail buyer. Arjun sources products from 20+ countries to bring the world's finest to Indian pet parents.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="about-cta fade-up">
+        <h2>Ready to Spoil<br>Your <em>Pet Royally?</em></h2>
+        <p>Join 15,000+ pet families who trust Petify for the very best.</p>
+        <a href="products.html" class="btn-gold" style="font-size:16px;">Shop the Collection →</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="logo"><span class="logo-text">Petify</span></div>
+                <p class="tagline">Where Every Paw Finds Pure Joy. Premium curated products for your beloved companions.</p>
+            </div>
+            <div class="footer-col"><h3>Shop</h3><a href="products.html?category=Dogs">Dogs</a><a href="products.html?category=Cats">Cats</a><a href="products.html?category=Birds">Birds</a><a href="products.html?category=Fish">Aquatic</a></div>
+            <div class="footer-col"><h3>Company</h3><a href="about.html">Our Story</a><a href="blog.html">Blog</a><a href="about.html">Careers</a><a href="mailto:mohitshekhawat24505@gmail.com">Contact Us</a></div>
+            <div class="footer-col"><h3>Help</h3><a href="profile.html">Track Order</a><a href="blog.html">Returns Policy</a><a href="blog.html">FAQs</a><a href="about.html">Privacy Policy</a></div>
+        </div>
+        <div class="footer-bottom"><div class="sep-line"></div><p>© 2026 Petify. Crafted with Love. <span class="footer-paws">🐾🐾🐾</span></p></div>
+    </footer>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-drawer" id="cart-drawer">
+        <div class="cart-header"><h2>Your Cart 🛒</h2><button class="close-cart" id="close-cart-btn">✕</button></div>
+        <div class="cart-items" id="cart-items-container"><div class="empty-cart-state" id="empty-cart-state"><div class="empty-icon">🛒</div><p>Your cart is empty</p><button class="btn-primary" onclick="window.location.href='products.html'">Shop Now</button></div></div>
+        <div class="cart-footer"><div class="cart-total-row"><span>Total</span><span id="cart-total-price">₹0</span></div><button class="btn-primary full-width" onclick="window.location.href='checkout.html'">Continue to Checkout →</button></div>
+    </aside>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

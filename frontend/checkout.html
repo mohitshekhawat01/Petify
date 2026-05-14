@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <title>Secure Checkout - Petify</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .checkout-section {
+            padding: 120px 40px 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: start;
+        }
+        .checkout-header {
+            font-size: 32px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--ivory3);
+        }
+        .checkout-form {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--ivory3);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--ivory2);
+            border: 1px solid var(--ivory3);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--brown);
+            transition: all 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(201,151,58,0.1);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--ivory);
+            padding: 40px;
+            border-radius: 24px;
+            position: sticky;
+            top: 100px;
+            border: 1px solid var(--ivory3);
+        }
+        .summary-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .summary-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .s-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .s-item-icon {
+            width: 50px; height: 50px;
+            background: var(--white);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+        }
+        .s-item-details { flex: 1; }
+        .s-item-name { font-weight: 500; font-size: 14px; color: var(--brown); margin-bottom: 2px;}
+        .s-item-qty { font-size: 12px; color: var(--text-muted); }
+        .s-item-price { font-weight: 600; color: var(--gold); }
+        
+        .summary-totals {
+            border-top: 1px solid var(--ivory3);
+            padding-top: 20px;
+        }
+        .total-row {
+            display: flex; justify-content: space-between;
+            margin-bottom: 12px; font-size: 14px;
+            color: var(--text-main);
+        }
+        .total-row.grand-total {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--brown);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--ivory3);
+        }
+        .pay-btn {
+            margin-top: 30px;
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🐾</span>
+                <span class="logo-text">Petify</span>
+            </a>
+            <div class="nav-links">
+                <span style="color:var(--brown); font-weight: 600;">Secure Checkout 🔒</span>
+            </div>
+            <div class="nav-actions">
+                <a href="index.html" class="icon-btn" style="color:var(--brown);"><span style="margin-right:8px;">←</span> Return to Shop</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <main id="main-content">
+        <section class="checkout-section">
+            <div class="checkout-left">
+                <h1 class="checkout-header">Shipping Details</h1>
+                
+                <form class="checkout-form" id="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="fname" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="lname" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <label class="form-label" style="margin-bottom:0;">Shipping Address</label>
+                            <button type="button" id="locate-btn" onclick="useMyLocation()" style="display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--brown),#6b3a1f);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                                <span id="locate-icon">📍</span>
+                                <span id="locate-text">Use My Location</span>
+                            </button>
+                        </div>
+                        <input type="text" id="address" class="form-input" placeholder="Apartment, Studio, or Floor" required oninput="updateMapLink()">
+                        <div id="map-link-row" style="display:none; margin-top:8px;">
+                            <a id="map-link" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--gold);text-decoration:none;font-weight:500;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                                🗺️ View on Google Maps ↗
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" id="city" class="form-input" required oninput="updateMapLink()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <input type="text" id="state" class="form-input" required oninput="updateMapLink()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" id="postalCode" class="form-input" required oninput="updateMapLink()">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Country</label>
+                        <input type="text" id="country" class="form-input" value="India" required oninput="updateMapLink()">
+                    </div>
+
+                    <h2 class="checkout-header" style="margin-top: 40px; font-size: 24px; border:none; padding-bottom:5px; margin-bottom:15px;">Payment Method</h2>
+                    <div class="form-group" style="display: flex; gap: 20px; font-size: 15px; color: var(--brown);">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="paymentOption" value="Razorpay" checked>
+                            Credit Card / Netbanking (Razorpay)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="paymentOption" value="COD">
+                            Cash on Delivery (COD)
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="checkout-right">
+                <div class="order-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    <div class="summary-items" id="summary-items">
+                        <!-- Injected JS -->
+                    </div>
+
+                    <!-- Coupon Box with Dropdown -->
+                    <style>
+                        .coupon-wrap { position: relative; margin-bottom: 25px; }
+                        .coupon-row { display: flex; gap: 10px; align-items: center; }
+                        .coupon-tag-btn {
+                            display: flex; align-items: center; gap: 5px;
+                            background: linear-gradient(135deg, rgba(201,151,58,0.12), rgba(201,151,58,0.05));
+                            border: 1.5px dashed var(--gold); border-radius: 20px;
+                            padding: 8px 14px; font-size: 12px; font-weight: 600; color: var(--gold);
+                            cursor: pointer; white-space: nowrap; transition: all 0.2s;
+                            letter-spacing: 0.5px; flex-shrink: 0;
+                        }
+                        .coupon-tag-btn:hover { background: rgba(201,151,58,0.2); transform: scale(1.03); }
+                        .coupon-dropdown {
+                            display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+                            background: #fff; border: 1px solid var(--ivory3);
+                            border-radius: 16px; box-shadow: 0 12px 40px rgba(74,40,16,0.12);
+                            z-index: 100; overflow: hidden; animation: dropIn 0.2s ease;
+                        }
+                        .coupon-dropdown.open { display: block; }
+                        @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+                        .coupon-drop-header {
+                            padding: 12px 16px 8px; font-size: 11px; text-transform: uppercase;
+                            letter-spacing: 1.5px; color: var(--text-muted); font-weight: 600;
+                            border-bottom: 1px solid var(--ivory3);
+                        }
+                        .coupon-option {
+                            display: flex; align-items: center; justify-content: space-between;
+                            padding: 11px 16px; cursor: pointer; transition: background 0.15s;
+                            border-bottom: 1px solid var(--ivory3);
+                        }
+                        .coupon-option:last-child { border-bottom: none; }
+                        .coupon-option:hover { background: rgba(201,151,58,0.07); }
+                        .coupon-option-left { display: flex; align-items: center; gap: 10px; }
+                        .coupon-chip {
+                            background: rgba(201,151,58,0.1); color: var(--gold);
+                            font-size: 11px; font-weight: 700; letter-spacing: 1px;
+                            padding: 3px 9px; border-radius: 6px; border: 1px dashed var(--gold);
+                        }
+                        .coupon-desc { font-size: 12px; color: var(--text-muted); }
+                        .coupon-apply-lbl { font-size: 11px; color: var(--gold); font-weight: 600; opacity: 0; transition: opacity 0.2s; }
+                        .coupon-option:hover .coupon-apply-lbl { opacity: 1; }
+                    </style>
+                    <div class="coupon-wrap" id="coupon-wrap">
+                        <!-- Applied coupon badge (hidden until a coupon is applied) -->
+                        <div id="coupon-applied-bar" style="display:none; align-items:center; gap:10px; padding:10px 0;">
+                            <span id="coupon-applied-label" style="background:rgba(46,139,87,0.12); color:#2e8b57; font-size:12px; font-weight:700; letter-spacing:1px; padding:5px 12px; border-radius:8px; border:1px dashed #2e8b57;"></span>
+                            <span id="coupon-applied-desc" style="font-size:12px; color:var(--text-muted);"></span>
+                            <button type="button" onclick="removeCoupon()" style="margin-left:auto; background:none; border:none; color:#dc3545; font-size:12px; font-weight:600; cursor:pointer; padding:4px 10px; border-radius:8px; border:1px solid rgba(220,53,69,0.3); transition:background 0.2s;" onmouseover="this.style.background='rgba(220,53,69,0.07)'" onmouseout="this.style.background='none'">✕ Remove</button>
+                        </div>
+                        <div class="coupon-row" id="coupon-input-row">
+                            <input type="text" id="coupon-code" class="form-input" placeholder="Enter coupon code" style="padding: 10px 15px;">
+                            <button type="button" class="coupon-tag-btn" onclick="toggleCouponDrop(event)">🎟️ Offers ▾</button>
+                            <button type="button" class="btn-primary" onclick="applyCoupon()" style="padding: 10px 20px; font-size: 14px; width: auto; flex-shrink: 0;">Apply</button>
+                        </div>
+                        <div class="coupon-dropdown" id="coupon-dropdown">
+                            <div class="coupon-drop-header">🏷️ Available Offers — tap to apply</div>
+                            <div class="coupon-option" onclick="pickCoupon('PETIFY10')">
+                                <div class="coupon-option-left"><span class="coupon-chip">PETIFY10</span><span class="coupon-desc">10% off on entire order</span></div>
+                                <span class="coupon-apply-lbl">Apply →</span>
+                            </div>
+                            <div class="coupon-option" onclick="pickCoupon('PETIFY20')">
+                                <div class="coupon-option-left"><span class="coupon-chip">PETIFY20</span><span class="coupon-desc">20% off on entire order</span></div>
+                                <span class="coupon-apply-lbl">Apply →</span>
+                            </div>
+                            <div class="coupon-option" onclick="pickCoupon('PAWSOME15')">
+                                <div class="coupon-option-left"><span class="coupon-chip">PAWSOME15</span><span class="coupon-desc">15% off — Paw-some deal 🐾</span></div>
+                                <span class="coupon-apply-lbl">Apply →</span>
+                            </div>
+                            <div class="coupon-option" onclick="pickCoupon('WELCOME50')">
+                                <div class="coupon-option-left"><span class="coupon-chip">WELCOME50</span><span class="coupon-desc">Flat ₹50 off — New user gift 🎁</span></div>
+                                <span class="coupon-apply-lbl">Apply →</span>
+                            </div>
+                            <div class="coupon-option" onclick="pickCoupon('FREESHIP')">
+                                <div class="coupon-option-left"><span class="coupon-chip">FREESHIP</span><span class="coupon-desc">Free shipping on your order 🚚</span></div>
+                                <span class="coupon-apply-lbl">Apply →</span>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function toggleCouponDrop(e) {
+                            e.stopPropagation();
+                            document.getElementById('coupon-dropdown').classList.toggle('open');
+                        }
+                        function pickCoupon(code) {
+                            document.getElementById('coupon-code').value = code;
+                            document.getElementById('coupon-dropdown').classList.remove('open');
+                            applyCoupon();
+                        }
+                        document.addEventListener('click', () => {
+                            document.getElementById('coupon-dropdown')?.classList.remove('open');
+                        });
+                    </script>
+
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">₹0</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Shipping</span>
+                            <span id="shipping">Free</span>
+                        </div>
+                        <div class="total-row" id="discount-row" style="display:none; color: var(--sg);">
+                            <span>Discount</span>
+                            <span id="discount-amount">-₹0</span>
+                        </div>
+                        <div class="total-row">
+                            <span>GST (18%)</span>
+                            <span id="gst-amount">₹0</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total</span>
+                            <span id="grand-total">₹0</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary pay-btn" id="pay-btn" onclick="processPayment()">Place Order</button>
+                    <p style="font-size:12px; color:var(--text-muted); text-align:center; margin-top:15px;">Secure checkout via Razorpay or COD</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let cartItems = [];
+        let subtotalAmt = 0;
+        let totalAmt = 0;
+        let discountAmt = 0;
+        let couponApplied = false;
+        let freeShipping = false;  // set by FREESHIP coupon
+
+        // ── Geolocation: Use My Location ──────────────────────────────
+        async function useMyLocation() {
+            if (!navigator.geolocation) {
+                showToast('❌ Geolocation is not supported by your browser.');
+                return;
+            }
+            const btn  = document.getElementById('locate-btn');
+            const icon = document.getElementById('locate-icon');
+            const txt  = document.getElementById('locate-text');
+            btn.disabled = true;
+            icon.textContent = '⏳';
+            txt.textContent  = 'Locating...';
+
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    const { latitude, longitude } = pos.coords;
+                    try {
+                        // Free reverse geocoding via OpenStreetMap Nominatim (no API key)
+                        const res  = await fetch(
+                            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+                            { headers: { 'Accept-Language': 'en' } }
+                        );
+                        const data = await res.json();
+                        const addr = data.address || {};
+
+                        // Build street line
+                        const streetParts = [
+                            addr.house_number,
+                            addr.road || addr.pedestrian || addr.footway,
+                            addr.suburb || addr.neighbourhood || addr.quarter
+                        ].filter(Boolean);
+                        const streetLine = streetParts.join(', ');
+
+                        // Fill fields
+                        if (streetLine) document.getElementById('address').value    = streetLine;
+                        const cityVal = addr.city || addr.town || addr.village || addr.county || '';
+                        if (cityVal)   document.getElementById('city').value        = cityVal;
+                        if (addr.state) document.getElementById('state').value      = addr.state;
+                        if (addr.postcode) document.getElementById('postalCode').value = addr.postcode;
+                        if (addr.country)  document.getElementById('country').value = addr.country;
+
+                        icon.textContent = '✅';
+                        txt.textContent  = 'Location filled!';
+                        showToast('📍 Address auto-filled from your location!');
+                        updateMapLink();
+
+                        setTimeout(() => {
+                            icon.textContent = '📍';
+                            txt.textContent  = 'Use My Location';
+                            btn.disabled = false;
+                        }, 3000);
+
+                    } catch(e) {
+                        showToast('❌ Could not fetch address. Please fill manually.');
+                        resetLocateBtn();
+                    }
+                },
+                (err) => {
+                    const msgs = {
+                        1: 'Location permission denied. Please allow access in browser settings.',
+                        2: 'Location unavailable. Try again.',
+                        3: 'Location request timed out.'
+                    };
+                    showToast('❌ ' + (msgs[err.code] || 'Could not get location.'));
+                    resetLocateBtn();
+                },
+                { timeout: 10000, maximumAge: 60000 }
+            );
+        }
+
+        function resetLocateBtn() {
+            document.getElementById('locate-btn').disabled = false;
+            document.getElementById('locate-icon').textContent = '📍';
+            document.getElementById('locate-text').textContent = 'Use My Location';
+        }
+
+        // ── Map Link: update as user types ────────────────────────────
+        function updateMapLink() {
+            const parts = [
+                document.getElementById('address')?.value,
+                document.getElementById('city')?.value,
+                document.getElementById('state')?.value,
+                document.getElementById('postalCode')?.value,
+                document.getElementById('country')?.value,
+            ].filter(v => v && v.trim());
+
+            const row  = document.getElementById('map-link-row');
+            const link = document.getElementById('map-link');
+            if (parts.length >= 2) {
+                const query = encodeURIComponent(parts.join(', '));
+                link.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+                row.style.display = 'block';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('petify_token');
+            if (token) {
+                // Fetch user data
+                API.getProfile().then(user => {
+                    document.getElementById('fname').value = user.name.split(' ')[0] || '';
+                    document.getElementById('lname').value = user.name.split(' ')[1] || '';
+                    document.getElementById('email').value = user.email || '';
+                }).catch(e => console.log(e));
+            }
+
+            // Load cart — fetch directly from backend if logged in for guaranteed freshness
+            const loadCartAndRender = async () => {
+                try {
+                    if (token) {
+                        // Logged in: always get fresh cart from backend
+                        const res = await API.getCart();
+                        cartItems = (res.cartItems || []).filter(i => i.product && i.product.price != null);
+                    } else {
+                        // Guest: read from CartManager (localStorage)
+                        if (window.cartManager && window.cartManager.initPromise) {
+                            await window.cartManager.initPromise;
+                        }
+                        cartItems = (window.cartManager ? window.cartManager.cart : [])
+                            .filter(i => i.product && i.product.price != null);
+                    }
+                } catch(e) {
+                    console.error('Cart load failed:', e);
+                    cartItems = [];
+                }
+                renderSummary();
+            };
+            
+            loadCartAndRender();
+        });
+
+        function renderSummary() {
+            if (cartItems.length === 0) {
+                // Show empty cart state — no jarring alert
+                const container = document.getElementById('summary-items');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align:center;padding:40px 20px;">
+                            <div style="font-size:52px;margin-bottom:16px;">🛒</div>
+                            <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--brown);margin-bottom:8px;">Your cart is empty</h3>
+                            <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Add some items before checking out.</p>
+                            <button class="btn-primary" onclick="window.location.href='products.html'" style="padding:10px 28px;font-size:14px;">Shop Now →</button>
+                        </div>`;
+                }
+                document.getElementById('pay-btn').style.display = 'none';
+                return;
+            }
+
+            const container = document.getElementById('summary-items');
+            subtotalAmt = cartItems.reduce((acc, i) => acc + (i.product.price * i.qty), 0);
+
+            container.innerHTML = cartItems.map(item => {
+                const p = item.product;
+                const imgHtml = p.images && p.images.length > 0
+                    ? `<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+                    : p.emoji || '🐾';
+
+                return `
+                    <div class="s-item">
+                        <div class="s-item-icon">${imgHtml}</div>
+                        <div class="s-item-details">
+                            <div class="s-item-name">${p.name}</div>
+                            <div class="s-item-qty">Qty: ${item.qty}</div>
+                        </div>
+                        <div class="s-item-price">₹${p.price * item.qty}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Shipping: free if order > ₹999 OR FREESHIP coupon applied
+            let shipping = (freeShipping || subtotalAmt > 999) ? 0 : 99;
+            const discounted = subtotalAmt - discountAmt;
+            const gst = Math.round(discounted * 0.18);
+            totalAmt = discounted + shipping + gst;
+            if (totalAmt < 0) totalAmt = 0;
+
+            document.getElementById('subtotal').textContent = `₹${subtotalAmt}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `₹${shipping}`;
+            document.getElementById('gst-amount').textContent = `₹${gst}`;
+            document.getElementById('grand-total').textContent = `₹${totalAmt}`;
+        }
+
+        const COUPONS = {
+            'PETIFY10':  { type: 'percent', value: 10,  label: '10% off applied! 🎉' },
+            'PETIFY20':  { type: 'percent', value: 20,  label: '20% off applied! 🎉' },
+            'PAWSOME15': { type: 'percent', value: 15,  label: '15% off applied! 🐾' },
+            'WELCOME50': { type: 'flat',    value: 50,  label: 'Flat ₹50 off applied! 🎁' },
+            'FREESHIP':  { type: 'freeship', value: 0,  label: 'Free Shipping unlocked! 🚚' },
+        };
+
+        function applyCoupon() {
+            const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+            if (!code) return;
+
+            const coupon = COUPONS[code];
+            if (!coupon) {
+                showToast('❌ Invalid or expired coupon code.');
+                return;
+            }
+
+            // Auto-remove any previously applied coupon and swap to new one
+            if (couponApplied) removeCouponState();
+
+            couponApplied = true;
+            freeShipping = false;
+
+            if (coupon.type === 'percent') {
+                discountAmt = Math.round(subtotalAmt * coupon.value / 100);
+            } else if (coupon.type === 'flat') {
+                discountAmt = Math.min(coupon.value, subtotalAmt);
+            } else if (coupon.type === 'freeship') {
+                freeShipping = true;
+                discountAmt = 0;
+            }
+
+            const dRow = document.getElementById('discount-row');
+            if (coupon.type === 'freeship') {
+                dRow.style.display = 'none';
+            } else {
+                dRow.style.display = 'flex';
+                document.getElementById('discount-amount').textContent = `-₹${discountAmt}`;
+            }
+
+            // Show applied badge, hide input row
+            document.getElementById('coupon-input-row').style.display = 'none';
+            document.getElementById('coupon-applied-bar').style.display = 'flex';
+            document.getElementById('coupon-applied-label').textContent = code;
+            document.getElementById('coupon-applied-desc').textContent = coupon.label;
+
+            showToast(coupon.label);
+            renderSummary();
+        }
+
+        function removeCouponState() {
+            couponApplied = false;
+            discountAmt = 0;
+            freeShipping = false;
+            document.getElementById('discount-row').style.display = 'none';
+            document.getElementById('discount-amount').textContent = '-₹0';
+        }
+
+        function removeCoupon() {
+            removeCouponState();
+            document.getElementById('coupon-code').value = '';
+            document.getElementById('coupon-input-row').style.display = 'flex';
+            document.getElementById('coupon-applied-bar').style.display = 'none';
+            renderSummary();
+            showToast('Coupon removed.');
+        }
+
+        async function processPayment() {
+            const form = document.getElementById('checkout-form');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                showToast('Please fill all required shipping details correctly.');
+                return;
+            }
+            
+            const fname = document.getElementById('fname').value.trim();
+            if(!fname) {
+                showToast('Please enter your First Name.');
+                return;
+            }
+
+            const shippingAddress = {
+                fullName: `${fname} ${document.getElementById('lname').value.trim()}`,
+                line1: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value || 'N/A',
+                pincode: document.getElementById('postalCode').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value
+            };
+
+            const paymentMethodStr = document.querySelector('input[name="paymentOption"]:checked').value;
+
+            const orderData = {
+                orderItems: cartItems.map(i => ({
+                    name: i.product.name,
+                    qty: i.qty,
+                    image: (i.product.images && i.product.images[0]) || i.product.emoji || '',
+                    price: i.product.price,
+                    product: i.product._id
+                })),
+                address: shippingAddress,
+                total: totalAmt,
+                payment: {
+                    status: 'pending'
+                }
+            };
+
+            try {
+                // Create Order in DB (works for both guests and logged-in users)
+                document.getElementById('pay-btn').textContent = 'Processing...';
+                const dbOrder = await API.createOrder(orderData);
+                    
+                    if (paymentMethodStr === 'COD') {
+                        // Directly go to success for COD
+                        showToast('Order placed directly via COD.');
+                        setTimeout(() => {
+                            localStorage.removeItem('petify_cart');
+                            window.location.href = `order-success.html?orderId=${dbOrder._id}&name=${encodeURIComponent(fname)}`;
+                        }, 1000);
+                        return;
+                    }
+
+                    // Call razorpay order endpoint
+                    const rzpData = await API.createRazorpayOrder(totalAmt);
+                    
+                    // Razorpay config
+                    const options = {
+                        key: "rzp_test_SVwIgAgReTiKwk",
+                        amount: rzpData.amount,
+                        currency: "INR",
+                        name: "Petify Boutique",
+                        description: "Premium Pet Products Order",
+                        order_id: rzpData.id,
+                        handler: async function (response) {
+                            // Verify signature before marking as paid
+                            try {
+                                const verification = await API.verifyPayment({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                });
+                                if (!verification.verified) {
+                                    alert('Payment verification failed. Please contact support.');
+                                    return;
+                                }
+                            } catch(verifyErr) {
+                                console.error('Verification error:', verifyErr);
+                            }
+
+                            await API.updatePaymentSuccess(dbOrder._id, {
+                                razorpayPaymentId: response.razorpay_payment_id,
+                                razorpayOrderId: response.razorpay_order_id,
+                                razorpaySignature: response.razorpay_signature
+                            });
+                            
+                            // Send Invoice
+                            await API.emailInvoice(dbOrder._id).catch(e => console.log('Invoice email failed', e));
+
+                            // Clear cart after successful payment
+                            localStorage.removeItem('petify_cart');
+                            if (window.cartManager) { window.cartManager.cart = []; window.cartManager.updateUI(); }
+
+                            window.location.href = `order-success.html?orderId=${dbOrder._id}&name=${encodeURIComponent(fname)}`;
+                        },
+                        prefill: {
+                            name: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`,
+                            email: document.getElementById('email').value,
+                            contact: document.getElementById('phone').value
+                        },
+                        theme: {
+                            color: "#c9973a"
+                        }
+                    };
+
+                    if (rzpData.id && rzpData.id.startsWith('order_mock_')) {
+                        showToast('Simulating Razorpay payment... (Demo Mode)');
+                        setTimeout(async () => {
+                            await options.handler({
+                                razorpay_payment_id: 'pay_mock_' + Date.now(),
+                                razorpay_order_id: rzpData.id,
+                                razorpay_signature: 'mock_sig'
+                            });
+                        }, 1500);
+                        return;
+                    }
+
+                    const rzp1 = new Razorpay(options);
+                    rzp1.open();
+
+                } catch(e) {
+                    console.error("Order Creation Error:", e);
+                    alert(e.message || 'Payment processing failed. Please try again.');
+                    document.getElementById('pay-btn').textContent = 'Place Order';
+                }
+        }
+
+        function simulateSuccess(paymentMethodStr) {
+            const payBtn = document.getElementById('pay-btn');
+            payBtn.textContent = 'Processing Request...';
+            payBtn.disabled = true;
+            payBtn.style.opacity = '0.7';
+            
+            if (paymentMethodStr === 'COD') {
+                showToast('Processing COD Order...');
+            } else {
+                // Show toast message acting as a simulated payment gateway
+                showToast('Redirecting to secure payment gateway...');
+            }
+            
+            setTimeout(() => {
+                showToast('Payment successful! Verifying order...');
+                setTimeout(() => {
+                    // Clearing local cart manually since we are simulating
+                    localStorage.removeItem('petify_cart');
+                    window.location.href = 'order-success.html?orderId=guest_' + Math.floor(Math.random()*1000000);
+                }, 1500);
+            }, 2000);
+        }
+    </script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

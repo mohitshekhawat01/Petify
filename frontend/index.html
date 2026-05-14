@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petify 🐾 | Luxury Pet Boutique</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <!-- Fonts: Cormorant Garamond & Jost -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Search Overlay -->
+    <div id="search-overlay" style="
+        display:none; position:fixed; inset:0; z-index:10000;
+        background:rgba(15,8,3,0.92); backdrop-filter:blur(10px);
+        padding: 60px 20px 40px; overflow-y:auto;
+    ">
+        <button onclick="closeSearch()" style="
+            position:absolute; top:24px; right:28px;
+            background:none; border:none; color:#fff;
+            font-size:28px; cursor:pointer; opacity:0.7;
+        ">✕</button>
+
+        <div style="max-width:680px; margin:0 auto;">
+            <div style="position:relative; margin-bottom:32px;">
+                <span style="position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:20px;">🔍</span>
+                <input id="search-input" type="text" placeholder="Search for dog food, harness, cat tree..."
+                    oninput="onSearchInput(this.value)"
+                    onkeydown="if(event.key==='Enter') goToSearch()"
+                    style="
+                        width:100%; padding:18px 20px 18px 56px;
+                        border-radius:50px; border:2px solid rgba(201,151,58,0.5);
+                        background:rgba(255,255,255,0.07); color:#fff;
+                        font-size:18px; font-family:inherit; outline:none;
+                        transition: border-color 0.2s;
+                    "
+                />
+            </div>
+
+            <div id="search-suggestions" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+                <span style="font-size:12px;color:rgba(255,255,255,0.4);align-self:center;">Popular:</span>
+                <span onclick="quickSearch('Dog Harness')" style="cursor:pointer;padding:5px 14px;border-radius:20px;border:1px solid rgba(201,151,58,0.4);color:rgba(255,255,255,0.7);font-size:12px;transition:all .2s;" onmouseover="this.style.background='rgba(201,151,58,0.2)'" onmouseout="this.style.background=''">Dog Harness</span>
+                <span onclick="quickSearch('Cat Food')" style="cursor:pointer;padding:5px 14px;border-radius:20px;border:1px solid rgba(201,151,58,0.4);color:rgba(255,255,255,0.7);font-size:12px;transition:all .2s;" onmouseover="this.style.background='rgba(201,151,58,0.2)'" onmouseout="this.style.background=''">Cat Food</span>
+                <span onclick="quickSearch('Bird Cage')" style="cursor:pointer;padding:5px 14px;border-radius:20px;border:1px solid rgba(201,151,58,0.4);color:rgba(255,255,255,0.7);font-size:12px;transition:all .2s;" onmouseover="this.style.background='rgba(201,151,58,0.2)'" onmouseout="this.style.background=''">Bird Cage</span>
+                <span onclick="quickSearch('Kibble')" style="cursor:pointer;padding:5px 14px;border-radius:20px;border:1px solid rgba(201,151,58,0.4);color:rgba(255,255,255,0.7);font-size:12px;transition:all .2s;" onmouseover="this.style.background='rgba(201,151,58,0.2)'" onmouseout="this.style.background=''">Kibble</span>
+                <span onclick="quickSearch('Fish Filter')" style="cursor:pointer;padding:5px 14px;border-radius:20px;border:1px solid rgba(201,151,58,0.4);color:rgba(255,255,255,0.7);font-size:12px;transition:all .2s;" onmouseover="this.style.background='rgba(201,151,58,0.2)'" onmouseout="this.style.background=''">Fish Filter</span>
+            </div>
+
+            <div id="search-results"></div>
+        </div>
+    </div>
+    <!-- Cursor -->
+    <div id="custom-cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Background Canvas for Particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Intro Sequence -->
+    <section id="intro-sequence">
+        
+        <div class="intro-video">
+            <video src="images/Pet.mp4" autoplay muted playsinline></video>
+        </div>
+        <div class="intro-text">Welcome to Petify 🐾</div>
+        <button id="skip-intro" class="glass-btn">Skip Intro</button>
+    </section>
+
+    <!-- Cart Drawer Overlay -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    
+    <!-- Cart Drawer -->
+    <aside class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h2>Your Cart 🛒</h2>
+            <button class="close-cart" id="close-cart-btn">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <!-- Items dynamically injected here -->
+            <div class="empty-cart-state" id="empty-cart-state">
+                <div class="empty-icon">🛒</div>
+                <p>Let your pet choose something wonderful</p>
+                <button class="btn-primary" onclick="window.location.href='products.html'">Shop Now</button>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>Total</span>
+                <span id="cart-total-price">₹0</span>
+            </div>
+            <button class="btn-primary full-width" onclick="window.location.href='checkout.html'">Continue to Checkout →</button>
+        </div>
+    </aside>
+
+    <!-- Toast Notification -->
+    <div id="toast-container"></div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="navbar transparent">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🐾</span>
+                <span class="logo-text">Petify</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="products.html">Shop</a>
+                <a href="products.html?category=Dogs">Categories</a>
+                <a href="about.html">About</a>
+                <a href="blog.html">Blog</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="icon-btn search-btn" onclick="openSearch()">🔍</button>
+                <a href="login.html" id="nav-auth-btn" style="
+                    display: inline-flex; align-items: center; gap: 6px;
+                    padding: 8px 18px; border-radius: 20px;
+                    border: 1.5px solid var(--gold); color: var(--gold);
+                    font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+                    transition: all 0.25s; white-space: nowrap; text-decoration: none;
+                    background: rgba(201,151,58,0.07);
+                " onmouseover="this.style.background='rgba(201,151,58,0.18)'" onmouseout="this.style.background='rgba(201,151,58,0.07)'">
+                    👤 Login / Sign Up
+                </a>
+                <button class="cart-pill-btn" id="open-cart-btn" onclick="document.getElementById('cart-overlay').classList.add('active'); document.getElementById('cart-drawer').classList.add('active');">
+                    <span>🛒 Cart</span>
+                    <div class="cart-badge" id="cart-count">0</div>
+                </button>
+                
+                <div class="mobile-menu-btn" id="mobile-menu-btn">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Drawer (Hidden by default) -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="products.html">Shop</a>
+        <a href="products.html?category=Dogs">Categories</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="profile.html">My Profile</a>
+        <a href="login.html" id="mobile-auth-link">Login</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content">
+        <!-- HERO SECTION (PAPPIE STYLE) -->
+        <section class="hp-hero">
+            <div class="hp-bg-teal"></div>
+            <div class="hp-bg-stripe"></div>
+            
+            <div class="hp-big-text">
+                <div class="hp-word">PETIFY</div>
+            </div>
+            
+            <div class="hp-floaters">
+                <div class="hp-shape hp-sphere-half"></div>
+                <div class="hp-shape hp-spring"></div>
+                <div class="hp-shape hp-sphere-blue"></div>
+                <div class="hp-shape hp-pill-black hp-pill-1"></div>
+                <div class="hp-shape hp-pill-black hp-pill-2"></div>
+                <div class="hp-shape hp-cube"></div>
+                <div class="hp-shape hp-sphere-stack">
+                    <div class="hp-stack-ball hp-red"></div>
+                    <div class="hp-stack-ball hp-purple"></div>
+                    <div class="hp-stack-ball hp-orange"></div>
+                </div>
+                <a href="products.html" class="hp-arrow-btn">➔</a>
+            </div>
+
+            <div class="hp-center-dog">
+                <canvas id="dog-canvas" width="600" height="600"></canvas>
+            </div>
+
+            <div class="hp-bottom">
+                <div class="hp-left-text">
+                    <span class="hp-asterisk">*</span>
+                    <p>WE BELIEVE EVERY PET DESERVES THE ABSOLUTE BEST. LUXURY VET-APPROVED NUTRITION, PREMIUM APPAREL, AND DURABLE TOYS FORM OUR CURATED SELECTION FOR YOUR BELOVED COMPANIONS.</p>
+                    <a href="products.html" class="hp-btn">DISCOVER MORE ↗</a>
+                </div>
+                <div class="hp-right-stats">
+                    <div class="hp-stat"><div class="hp-num">15 K +</div><div class="hp-lbl">HAPPY PETS</div></div>
+                    <div class="hp-stat"><div class="hp-num">100 K +</div><div class="hp-lbl">ACTIVE USERS</div></div>
+                    <div class="hp-stat"><div class="hp-num">500 +</div><div class="hp-lbl">PRODUCTS</div></div>
+                </div>
+            </div>
+
+            <script>
+                // Make the generated 3D dog's white background transparent dynamically
+                const canvas = document.getElementById('dog-canvas');
+                const ctx = canvas.getContext('2d', {willReadFrequently: true});
+                const img = new Image();
+                img.src = 'images/hero-dog.png';
+                img.onload = () => {
+                    // Draw centered and cover
+                    const size = 600;
+                    ctx.drawImage(img, 0, 0, size, size);
+                    const imgData = ctx.getImageData(0,0,size,size);
+                    const data = imgData.data;
+                    for(let i=0; i<data.length; i+=4) {
+                        // If pixel is white/very light, remove it (alpha=0)
+                        if(data[i]>240 && data[i+1]>240 && data[i+2]>240) {
+                            data[i+3] = 0;
+                        }
+                    }
+                    ctx.putImageData(imgData, 0, 0);
+                };
+            </script>
+        </section>
+
+        <!-- MARQUEE STRIP -->
+        <div class="marquee-strip">
+            <div class="marquee-content">
+                <span>Free Delivery Over ₹999 <span class="gold-dot">✦</span> Vet-Approved Products <span class="gold-dot">✦</span> Beagle Approved 🐾 <span class="gold-dot">✦</span> Easy 30-Day Returns <span class="gold-dot">✦</span> 100% Natural Treats <span class="gold-dot">✦</span> Pan-India Delivery <span class="gold-dot">✦</span></span>
+                <span>Free Delivery Over ₹999 <span class="gold-dot">✦</span> Vet-Approved Products <span class="gold-dot">✦</span> Beagle Approved 🐾 <span class="gold-dot">✦</span> Easy 30-Day Returns <span class="gold-dot">✦</span> 100% Natural Treats <span class="gold-dot">✦</span> Pan-India Delivery <span class="gold-dot">✦</span></span>
+            </div>
+        </div>
+
+        <!-- FEATURES STRIP -->
+        <section class="features-strip">
+            <div class="feature-item">
+                <div class="feature-icon">🚚</div>
+                <div class="feature-text">
+                    <h4>Free Delivery</h4>
+                    <p>On orders above ₹999</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🩺</div>
+                <div class="feature-text">
+                    <h4>Vet Approved</h4>
+                    <p>Every product reviewed</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">↩️</div>
+                <div class="feature-text">
+                    <h4>Easy Returns</h4>
+                    <p>30-day no-hassle</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">
+                    <h4>Secure Checkout</h4>
+                    <p>256-bit SSL encryption</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES SECTION -->
+        <section class="categories-section fade-up">
+            <div class="section-header center">
+                <div class="section-eyebrow"><div class="gold-line"></div> Browse by</div>
+                <h2 class="section-title">Shop by <span class="italic-gold">Category</span></h2>
+            </div>
+            
+            <div class="categories-grid">
+                <a href="products.html?category=Dogs" class="category-card" style="--cat-grad: linear-gradient(to bottom, #c97b3a, #7a3810);">
+                    <div class="cat-bg"></div>
+                    <div class="cat-emoji">🦮</div>
+                    <div class="cat-overlay"></div>
+                    <div class="cat-content">
+                        <span class="cat-label">Collection</span>
+                        <h3>Dog World</h3>
+                        <span class="cat-count">248 Products</span>
+                    </div>
+                    <div class="cat-arrow">→</div>
+                </a>
+                
+                <a href="products.html?category=Cats" class="category-card" style="--cat-grad: linear-gradient(to bottom, #5a9e4e, #1a5e10);">
+                    <div class="cat-bg"></div>
+                    <div class="cat-emoji">🐱</div>
+                    <div class="cat-overlay"></div>
+                    <div class="cat-content">
+                        <span class="cat-label">Collection</span>
+                        <h3>Cat Lounge</h3>
+                        <span class="cat-count">194 Products</span>
+                    </div>
+                    <div class="cat-arrow">→</div>
+                </a>
+                
+                <a href="products.html?category=Fish" class="category-card" style="--cat-grad: linear-gradient(to bottom, #4a7faa, #1a3a6a);">
+                    <div class="cat-bg"></div>
+                    <div class="cat-emoji">🐠</div>
+                    <div class="cat-overlay"></div>
+                    <div class="cat-content">
+                        <span class="cat-label">Collection</span>
+                        <h3>Aqua Life</h3>
+                        <span class="cat-count">86 Products</span>
+                    </div>
+                    <div class="cat-arrow">→</div>
+                </a>
+                
+                <a href="products.html?category=Birds" class="category-card" style="--cat-grad: linear-gradient(to bottom, #c4a02a, #7a5808);">
+                    <div class="cat-bg"></div>
+                    <div class="cat-emoji">🐦</div>
+                    <div class="cat-overlay"></div>
+                    <div class="cat-content">
+                        <span class="cat-label">Collection</span>
+                        <h3>Bird Haven</h3>
+                        <span class="cat-count">112 Products</span>
+                    </div>
+                    <div class="cat-arrow">→</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- BEST SELLERS -->
+        <section class="products-section fade-up">
+            <div class="section-header between">
+                <div>
+                    <div class="section-eyebrow">Curated picks</div>
+                    <h2 class="section-title">Best <span class="italic-gold">Sellers</span></h2>
+                </div>
+                <div class="products-filters">
+                    <button class="filter-tab active" data-filter="All">All</button>
+                    <button class="filter-tab" data-filter="Dogs">Dogs</button>
+                    <button class="filter-tab" data-filter="Cats">Cats</button>
+                    <button class="filter-tab" data-filter="Food">Food & Treats</button>
+                    <button class="filter-tab" data-filter="Accessories">Accessories</button>
+                </div>
+                <a href="products.html" class="view-all-link">All products →</a>
+            </div>
+
+            <div class="products-grid" id="best-sellers-grid">
+                <!-- Products loaded via JS -->
+            </div>
+            
+            <!-- Shimmer Loading State -->
+            <div class="products-grid shimmer-grid" id="best-sellers-shimmer">
+                <div class="product-card skeleton"></div>
+                <div class="product-card skeleton"></div>
+                <div class="product-card skeleton"></div>
+                <div class="product-card skeleton"></div>
+                <div class="product-card skeleton"></div>
+                <div class="product-card skeleton"></div>
+            </div>
+        </section>
+        
+        <!-- TESTIMONIALS -->
+        <section class="testimonials-section fade-up">
+            <div class="section-header between">
+                <div>
+                    <div class="section-eyebrow"><div class="gold-line"></div> Pet Parents Love Us</div>
+                    <h2 class="section-title">Real <span class="italic-gold">Stories</span></h2>
+                </div>
+                <a href="products.html" class="view-all-link" style="border-bottom:none;">Shop Products →</a>
+            </div>
+
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">My beagle Max absolutely loves the harness. It fits like it was made for him and he literally runs to the door when he sees it. Petify is a blessing!</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">👩🏽</div>
+                        <div>
+                            <h4>Priya Sharma</h4>
+                            <span>Beagle mom · Delhi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">The tuna treats are phenomenal. My cats were picky eaters but they devoured these. Beautiful packaging, lightning fast delivery, amazing quality.</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">👨🏻</div>
+                        <div>
+                            <h4>Arjun Mehta</h4>
+                            <span>Cat dad · Mumbai</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">The pet cottage is absolutely gorgeous! My golden moved in the moment I assembled it. Genuinely luxury quality at a very fair price. Highly recommend.</p>
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">👩🏻</div>
+                        <div>
+                            <h4>Sneha Reddy</h4>
+                            <span>Golden Retriever mom · Bangalore</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="logo">
+                    <span class="logo-text">Petify</span>
+                </div>
+                <p class="tagline">Where Every Paw Finds Pure Joy. Premium curated products for your beloved companions.</p>
+                <div class="social-links">
+                    <a href="#" class="social-btn">IG</a>
+                    <a href="#" class="social-btn">FB</a>
+                    <a href="#" class="social-btn">TW</a>
+                    <a href="#" class="social-btn">YT</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Shop</h3>
+                <a href="products.html?category=Dogs">Dogs</a>
+                <a href="products.html?category=Cats">Cats</a>
+                <a href="products.html?category=Birds">Birds</a>
+                <a href="products.html?category=Fish">Aquatic</a>
+            </div>
+            <div class="footer-col">
+                <h3>Help</h3>
+                <a href="profile.html">Track Order</a>
+                <a href="blog.html">Returns Policy</a>
+                <a href="blog.html">Shipping Info</a>
+                <a href="blog.html">FAQs</a>
+            </div>
+            <div class="footer-col">
+                <h3>Company</h3>
+                <a href="about.html">Our Story</a>
+                <a href="about.html">Careers</a>
+                <a href="mailto:mohitshekhawat24505@gmail.com">Contact Us</a>
+                <a href="about.html">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="sep-line"></div>
+            <p>© 2026 Petify. Crafted with Love. <span class="footer-paws">🐾🐾🐾</span></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // ── Search Overlay ───────────────────────────────────────
+        let searchDebounce = null;
+
+        function openSearch() {
+            document.getElementById('search-overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('search-input').focus(), 80);
+        }
+
+        function closeSearch() {
+            document.getElementById('search-overlay').style.display = 'none';
+            document.body.style.overflow = '';
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
+
+        function quickSearch(term) {
+            document.getElementById('search-input').value = term;
+            onSearchInput(term);
+        }
+
+        function goToSearch() {
+            const q = document.getElementById('search-input').value.trim();
+            if (q) window.location.href = `products.html?search=${encodeURIComponent(q)}`;
+        }
+
+        function onSearchInput(val) {
+            clearTimeout(searchDebounce);
+            const container = document.getElementById('search-results');
+            if (!val.trim()) { container.innerHTML = ''; return; }
+            container.innerHTML = '<p style="color:rgba(255,255,255,0.4);font-size:14px;text-align:center;">Searching...</p>';
+            searchDebounce = setTimeout(() => runSearch(val.trim()), 350);
+        }
+
+        async function runSearch(query) {
+            const container = document.getElementById('search-results');
+            try {
+                const res = await API.getProducts(`?search=${encodeURIComponent(query)}&limit=5`);
+                const products = res.products || [];
+
+                if (products.length === 0) {
+                    container.innerHTML = '<p style="color:rgba(255,255,255,0.5);text-align:center;padding:40px 0;">No products found for "<strong>' + query + '</strong>"</p>';
+                    return;
+                }
+
+                container.innerHTML = products.map(p => {
+                    const img = p.images && p.images[0]
+                        ? `<img src="${p.images[0]}" style="width:56px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0;">`
+                        : `<div style="width:56px;height:56px;border-radius:10px;background:rgba(201,151,58,0.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">${p.emoji||'🐾'}</div>`;
+                    return `
+                    <div onclick="window.location.href='product-detail.html?id=${p._id}'" style="
+                        display:flex;align-items:center;gap:16px;padding:14px 16px;
+                        border-radius:14px;cursor:pointer;margin-bottom:8px;
+                        background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);
+                        transition:background 0.2s;
+                    " onmouseover="this.style.background='rgba(201,151,58,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+                        ${img}
+                        <div style="flex:1;min-width:0;">
+                            <div style="color:#fff;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+                            <div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">${p.category}</div>
+                        </div>
+                        <div style="color:var(--gold);font-weight:700;font-size:15px;flex-shrink:0;">₹${p.price}</div>
+                    </div>`;
+                }).join('') +
+                `<div onclick="goToSearch()" style="text-align:center;margin-top:12px;cursor:pointer;color:rgba(201,151,58,0.8);font-size:13px;padding:10px;border-radius:10px;border:1px dashed rgba(201,151,58,0.3);" onmouseover="this.style.background='rgba(201,151,58,0.1)'" onmouseout="this.style.background=''">
+                    See all results for "<strong>${query}</strong>" →
+                </div>`;
+            } catch(e) {
+                container.innerHTML = '<p style="color:rgba(255,100,100,0.7);text-align:center;">Something went wrong. Try again.</p>';
+            }
+        }
+    </script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <title>Order Success - Petify</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        body { background: var(--ivory); }
+        .success-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .success-card {
+            background: var(--white);
+            padding: 60px;
+            border-radius: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(74, 40, 16, 0.08);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pop 0.6s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .success-title {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: var(--brown);
+        }
+        .success-msg {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .order-id {
+            display: inline-block;
+            background: var(--ivory2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 40px;
+            border: 1px dashed var(--gold);
+        }
+        .success-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+    
+    <div class="success-page" id="confetti-container">
+        <div class="success-card">
+            <div class="success-icon">🎉🐾</div>
+            <h1 class="success-title">Order Confirmed!</h1>
+            <p class="success-msg">Your furry friend is going to love what's coming! We've received your order and an invoice has been emailed to you.</p>
+            <div class="order-id" id="display-order-id">#ORDER_ID</div>
+            
+            <div class="success-actions" style="margin-top: 25px; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="window.location.href='index.html'">Return to Home</button>
+                <button class="btn-secondary" id="download-btn" onclick="downloadInvoice()">Download Invoice</button>
+                <button class="btn-secondary" id="email-btn" onclick="emailInvoice()">Get Invoice in Mail</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let globalOrderId = null;
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            globalOrderId = urlParams.get('orderId');
+            
+            if (globalOrderId) {
+                document.getElementById('display-order-id').textContent = '#' + globalOrderId;
+            } else {
+                // No orderId — show friendly state
+                document.getElementById('display-order-id').textContent = 'Order Placed';
+                document.getElementById('email-btn').style.display = 'none';
+                document.getElementById('download-btn').style.display = 'none';
+            }
+
+            // Confetti magic
+            const container = document.getElementById('confetti-container');
+            const colors = ['#c9973a', '#4a2810', '#5a9e4e', '#ffffff', '#e8c39e'];
+            
+            for(let i=0; i<100; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = -10 + 'vh';
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                conf.style.animationDelay = (Math.random() * 2) + 's';
+                
+                // Add paw shape occasionally
+                if (Math.random() > 0.8) {
+                    conf.innerHTML = '🐾';
+                    conf.style.background = 'transparent';
+                    conf.style.fontSize = '20px';
+                }
+                
+                container.appendChild(conf);
+            }
+        });
+
+        async function downloadInvoice() {
+            if(!globalOrderId || globalOrderId.startsWith('guest')) {
+                alert("Invoice generation is not available for simulated offline orders.");
+                return;
+            }
+            const btn = document.getElementById('download-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Generating...';
+            btn.disabled = true;
+            try {
+                // Call the actual backend API
+                await API.downloadInvoice(globalOrderId);
+                btn.textContent = 'Downloaded!';
+            } catch(e) {
+                alert('Failed to download invoice: ' + e.message);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function emailInvoice() {
+            if(!globalOrderId || globalOrderId.startsWith('guest')) {
+                alert("Email invoice is not available for simulated offline orders.");
+                return;
+            }
+            const btn = document.getElementById('email-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            try {
+                // Call the actual backend API
+                await API.emailInvoice(globalOrderId);
+                btn.textContent = 'Sent!';
+            } catch(e) {
+                alert('Failed to send invoice email: ' + e.message);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

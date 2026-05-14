@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <title>Shop Collections - Petify</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .shop-header {
+            background: linear-gradient(135deg, var(--brown), #2d1808);
+            color: var(--white);
+            padding: 120px 40px 60px;
+            text-align: center;
+        }
+        .shop-title {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+        .shop-desc {
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .shop-container {
+            max-width: 1400px;
+            margin: 60px auto 100px;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--ivory);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--ivory3);
+            position: sticky;
+            top: 100px;
+        }
+        .filter-group {
+            margin-bottom: 30px;
+        }
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+        .filter-title {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            color: var(--brown);
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--ivory3);
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-main);
+            transition: color 0.2s;
+        }
+        .checkbox-label:hover {
+            color: var(--brown);
+        }
+        .checkbox-label input {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .checkbox-label input:checked {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+        .checkbox-label input:checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .clear-filters {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--brown);
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .clear-filters:hover {
+            background: var(--gold-pale);
+        }
+
+        /* Products Area */
+        .shop-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .results-count {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .sort-dropdown {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--ivory3);
+            background: var(--white);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--brown);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234A2810%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 10px auto;
+            padding-right: 40px;
+            outline: none;
+        }
+        
+        .pg-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 60px;
+        }
+        .page-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--ivory3);
+            background: var(--white);
+            color: var(--brown);
+            font-weight: 500; transition: all 0.3s;
+        }
+        .page-btn:hover, .page-btn.active {
+            background: var(--brown); color: var(--white); border-color: var(--brown);
+        }
+
+        /* Loading */
+        .shop-loader {
+            display: none;
+            text-align: center;
+            padding: 100px 0;
+            grid-column: 1 / -1;
+        }
+        .shop-loader .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid var(--ivory3); border-top-color: var(--gold);
+            border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;
+        }
+        .empty-state {
+            display: none; text-align: center; padding: 100px 0; grid-column: 1 / -1;
+        }
+        .empty-state h2 { font-family: var(--font-serif); font-size: 32px; color: var(--brown); margin-bottom: 15px;}
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🐾</span>
+                <span class="logo-text">Petify</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html?category=Dogs">Dogs</a>
+                <a href="products.html?category=Cats">Cats</a>
+                <a href="products.html" class="active">Shop All</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="icon-btn" onclick="document.getElementById('shop-search-input').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('shop-search-input').focus(),400); return false;">🔍</a>
+                <a href="login.html" class="icon-btn" id="nav-auth-link">👤</a>
+                <button class="cart-pill-btn" id="open-cart-btn" onclick="document.getElementById('cart-overlay').classList.add('active'); document.getElementById('cart-drawer').classList.add('active');">
+                    <span>Cart</span>
+                    <div class="cart-badge" id="cart-count">0</div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <main id="main-content">
+        <div class="shop-header">
+            <h1 class="shop-title">Petify Collections</h1>
+            <p class="shop-desc">Discover our curated selection of ultra-premium pet accessories, nutritious foods, and engaging toys designed to give your furry friend the best life possible.</p>
+        </div>
+
+        <div class="shop-container">
+            <aside class="sidebar">
+                <div class="filter-group">
+                    <h3 class="filter-title">Categories</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="Dogs"> Dogs</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="Cats"> Cats</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="Fish"> Fish</label>
+                    <label class="checkbox-label"><input type="checkbox" name="category" value="Birds"> Birds</label>
+                </div>
+                
+                <div class="filter-group">
+                    <h3 class="filter-title">Price Range</h3>
+                    <label class="checkbox-label"><input type="radio" name="priceRange" value="all" checked> All Prices</label>
+                    <label class="checkbox-label"><input type="radio" name="priceRange" value="0-1000"> Under ₹1000</label>
+                    <label class="checkbox-label"><input type="radio" name="priceRange" value="1000-2500"> ₹1000 - ₹2500</label>
+                    <label class="checkbox-label"><input type="radio" name="priceRange" value="2500-"> Over ₹2500</label>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Type</h3>
+                    <label class="checkbox-label"><input type="checkbox" name="badge" value="Sale"> On Sale</label>
+                    <label class="checkbox-label"><input type="checkbox" name="badge" value="Best Seller"> Best Sellers</label>
+                </div>
+
+                <button class="clear-filters" onclick="clearFilters()">Clear All Filters</button>
+            </aside>
+
+            <div class="products-area">
+                <div class="shop-toolbar">
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                        <div style="position:relative;">
+                            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
+                            <input type="text" id="shop-search-input" placeholder="Search products..."
+                                oninput="currentPage=1; applyFilters()"
+                                style="padding:9px 16px 9px 36px; border-radius:30px; border:1px solid var(--ivory3);
+                                    background:var(--white); font-family:var(--font-sans); font-size:14px;
+                                    color:var(--brown); outline:none; width:200px;"
+                            />
+                        </div>
+                        <div class="results-count" id="results-count">Showing 0 products</div>
+                    </div>
+                    <select class="sort-dropdown" id="sort-dropdown" onchange="applyFilters()">
+                        <option value="Newest">Newest Arrivals</option>
+                        <option value="Price Low">Price: Low to High</option>
+                        <option value="Price High">Price: High to Low</option>
+                        <option value="Top Rated">Top Rated</option>
+                    </select>
+                </div>
+
+                <div class="shop-loader" id="shop-loader">
+                    <div class="spinner"></div>
+                    <p>Fetching the best products...</p>
+                </div>
+
+                <div class="empty-state" id="empty-state">
+                    <h2>No Paws Found</h2>
+                    <p>We couldn't find any products matching your filters.</p>
+                    <button class="btn-primary" style="margin-top: 20px;" onclick="clearFilters()">Reset Filters</button>
+                </div>
+
+                <div class="pg-grid fade-up" id="products-grid">
+                    <!-- Products injected here -->
+                </div>
+
+                <div class="pagination" id="pagination">
+                    <!-- Pagination injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-bottom">
+            <div class="sep-line"></div>
+            <p> 2026 Petify Boutique. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- CART DRAWER -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="document.getElementById('cart-overlay').classList.remove('active'); document.getElementById('cart-drawer').classList.remove('active');">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-total-row"><span>Total</span><span id="cart-total-price">₹0</span></div>
+            <button class="btn-primary full-width" onclick="window.location.href='checkout.html'">Checkout →</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let currentPage = 1;
+        const limit = 12;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if URL has a category parameter to pre-select
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryObj = urlParams.get('category');
+            if (categoryObj) {
+                const cb = document.querySelector(`input[name="category"][value="${categoryObj}"]`);
+                if (cb) cb.checked = true;
+            }
+            // Pre-fill search from URL
+            const searchParam = urlParams.get('search');
+            if (searchParam) {
+                document.getElementById('shop-search-input').value = searchParam;
+            }
+
+            // Bind filter changes
+            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+                el.addEventListener('change', () => {
+                    currentPage = 1;
+                    applyFilters();
+                });
+            });
+
+            applyFilters();
+        });
+
+        async function applyFilters() {
+            const grid = document.getElementById('products-grid');
+            const loader = document.getElementById('shop-loader');
+            const emptyState = document.getElementById('empty-state');
+            const pagination = document.getElementById('pagination');
+            
+            grid.style.display = 'none';
+            emptyState.style.display = 'none';
+            pagination.style.display = 'none';
+            grid.classList.remove('visible');
+            loader.style.display = 'block';
+
+            // Build Query
+            const cats = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+            const badge = document.querySelector('input[name="badge"]:checked')?.value;
+            const sort = document.getElementById('sort-dropdown')?.value || 'Newest';
+            const priceRange = document.querySelector('input[name="priceRange"]:checked')?.value || 'all';
+            const searchTerm = document.getElementById('shop-search-input')?.value.trim() || '';
+
+            let query = `?page=${currentPage}&limit=${limit}&sort=${sort}`;
+            if (searchTerm) query += `&search=${encodeURIComponent(searchTerm)}`;
+            else if (cats.length === 1) query += `&category=${cats[0]}`;
+
+            try {
+                const res = await API.getProducts(query);
+                let products = res.products;
+
+                // Client-side fallback filtering for multi-categories & badges & price
+                if (cats.length > 1) {
+                    products = products.filter(p => cats.includes(p.category));
+                }
+                if (badge) {
+                    products = products.filter(p => p.badge === badge);
+                }
+                if (priceRange !== 'all') {
+                    const [min, max] = priceRange.split('-');
+                    products = products.filter(p => p.price >= parseInt(min) && (max ? p.price <= parseInt(max) : true));
+                }
+
+                document.getElementById('results-count').textContent = `Showing ${products.length} products`;
+
+                if (products.length === 0) {
+                    loader.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                grid.innerHTML = '';
+                products.forEach(p => {
+                    const isSale = p.oldPrice ? true : false;
+                    let badgeClass = 'badge-new';
+                    if (p.badge === 'Best Seller') badgeClass = 'badge-best';
+                    if (p.badge && (p.badge.includes('Off') || p.badge === 'Sale')) badgeClass = 'badge-sale';
+                    const badgeHtml = p.badge ? `<div class="prod-badge ${badgeClass}">${p.badge}</div>` : '';
+
+                    const imgHtml = p.images && p.images.length > 0
+                        ? `<img src="${p.images[0]}" class="prod-image">`
+                        : `<div class="prod-emoji">${p.emoji || '🐾'}</div>`;
+
+                    const html = `
+                        <div class="product-card" data-id="${p._id}" onclick="window.location.href='product-detail.html?id=${p._id}'">
+                            <div class="prod-img-area">
+                                ${badgeHtml}
+                                <button class="prod-wishlist" data-product-id="${p._id}" onclick="toggleWishlist(event, this)">🤍</button>
+                                ${imgHtml}
+                                <div class="quick-add-bar">Quick Add to Cart</div>
+                            </div>
+                            <div class="prod-info">
+                                <span class="prod-cat">${p.category}</span>
+                                <h3 class="prod-name">${p.name}</h3>
+                                <div class="prod-rating">
+                                    <span class="stars">${renderStars(p.rating)}</span>
+                                    <span>${p.numReviews} reviews</span>
+                                </div>
+                                <div class="prod-bottom">
+                                    <div class="prod-price-area">
+                                        ${isSale ? `<span class="prod-old-price">₹${p.oldPrice}</span>` : ''}
+                                        <span class="prod-price">₹${p.price}</span>
+                                    </div>
+                                    <button class="add-to-cart-btn" onclick="addToCartAnimation(event, '${p._id}', '${p.emoji || '🐾'}', '${p.name.replace(/'/g, "\\'")}')">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.insertAdjacentHTML('beforeend', html);
+                });
+
+                // Simple pagination UI rendering
+                pagination.innerHTML = '';
+                const totalPages = Math.ceil(res.total / limit);
+                for(let i=1; i<=totalPages; i++) {
+                    pagination.innerHTML += `<button class="page-btn ${i===currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                }
+
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+                pagination.style.display = 'flex';
+                // Trigger reflow for fade up
+                setTimeout(() => grid.classList.add('visible'), 50);
+
+            } catch (err) {
+                console.error(err);
+                loader.style.display = 'none';
+                emptyState.innerHTML = '<h2>Error loading products</h2><p>Please try again later.</p>';
+                emptyState.style.display = 'block';
+            }
+        }
+
+        window.goToPage = function(page) {
+            currentPage = page;
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+            applyFilters();
+        };
+
+        window.clearFilters = function() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.querySelector('input[name="priceRange"][value="all"]').checked = true;
+            document.getElementById('sort-dropdown').value = 'Newest';
+            currentPage = 1;
+            applyFilters();
+        };
+    </script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

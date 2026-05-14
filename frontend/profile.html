@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+    <title>My Profile - Petify</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .profile-section {
+            padding: 120px 40px 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        .profile-sidebar {
+            background: var(--ivory);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--ivory3);
+            text-align: center;
+            position: sticky;
+            top: 100px;
+        }
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--gold), var(--brown));
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: var(--white);
+            box-shadow: 0 10px 20px rgba(201,151,58,0.3);
+        }
+        .profile-name {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: var(--brown);
+        }
+        .profile-email {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+        .profile-nav button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .profile-nav button:hover, .profile-nav button.active {
+            background: var(--white);
+            color: var(--brown);
+            box-shadow: var(--shadow-soft);
+        }
+        .logout-btn {
+            color: var(--red) !important;
+        }
+        .logout-btn:hover {
+            background: rgba(220, 53, 69, 0.1) !important;
+        }
+
+        .profile-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--ivory3);
+        }
+        .content-header {
+            font-size: 24px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--ivory3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ─── Form Input (local — not in global style.css) ─── */
+        .s-input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid rgba(201,151,58,0.25);
+            border-radius: 12px;
+            background: #fff;
+            font-size: 14px;
+            color: var(--brown);
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .s-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(201,151,58,0.1);
+        }
+        .s-input:disabled {
+            background: rgba(201,151,58,0.04);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            border-color: rgba(201,151,58,0.1);
+        }
+        .s-input::placeholder { color: rgba(74,40,16,0.3); font-size: 13px; }
+
+        /* ─── Settings Cards ─── */
+        .settings-card {
+            background: #fff;
+            border: 1px solid rgba(201,151,58,0.14);
+            border-radius: 22px;
+            padding: 30px 32px;
+            box-shadow: 0 2px 16px rgba(74,40,16,0.06);
+        }
+        .settings-section-label {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+            text-transform: uppercase; color: var(--gold);
+            margin-bottom: 22px; padding-bottom: 14px;
+            border-bottom: 1px solid rgba(201,151,58,0.14);
+        }
+        .settings-section-label span:first-child { font-size: 17px; }
+
+        .settings-form-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 20px; margin-bottom: 28px;
+        }
+        .settings-field {
+            display: flex; flex-direction: column; gap: 7px;
+        }
+        .settings-field-full { grid-column: 1 / -1; }
+
+        .s-label {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+            text-transform: uppercase; color: var(--text-muted);
+        }
+        .s-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
+
+        /* Save Button */
+        .settings-save-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 30px; border-radius: 999px;
+            background: linear-gradient(135deg, var(--brown), var(--gold));
+            color: #fff; border: none; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+            letter-spacing: 0.3px;
+        }
+        .settings-save-btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+        .settings-save-btn:active { transform: scale(0.97); }
+
+        /* Password input wrapper */
+        .pwd-wrap { position: relative; display: flex; align-items: center; }
+        .pwd-wrap .s-input { padding-right: 46px; }
+        .pwd-toggle {
+            position: absolute; right: 13px;
+            background: none; border: none; cursor: pointer;
+            font-size: 15px; color: var(--text-muted);
+            transition: color 0.2s; padding: 0; line-height: 1;
+            display: flex; align-items: center;
+        }
+        .pwd-toggle:hover { color: var(--gold); }
+
+        @media(max-width: 640px) {
+            .settings-form-grid { grid-template-columns: 1fr; }
+            .settings-card { padding: 22px 18px; }
+        }
+
+
+        /* Orders Styles */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .o-id { font-family: monospace; font-size: 14px; color: var(--gold); margin-bottom: 8px;}
+        .o-date { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+        /* Legacy clearing */
+
+        .order-card { display: none; }
+
+        /* ── Order History Cards ── */
+        @keyframes ohFadeUp {
+            from { opacity:0; transform:translateY(16px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .oh-card {
+            background: var(--white);
+            border: 1px solid rgba(201,151,58,0.14);
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 14px rgba(74,40,16,0.05);
+            transition: box-shadow 0.25s, transform 0.25s;
+            animation: ohFadeUp 0.4s ease both;
+        }
+        .oh-card:hover { box-shadow: 0 8px 28px rgba(201,151,58,0.15); transform: translateY(-2px); }
+
+        .oh-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+        .oh-left   { display:flex; align-items:center; gap:12px; }
+        .oh-icon   { font-size:28px; flex-shrink:0; }
+
+        .oh-orderno { font-family: monospace; font-size: 13.5px; font-weight: 700; color: var(--gold); letter-spacing:0.5px; }
+        .oh-date    { font-size: 11.5px; color: var(--text-muted); margin-top:2px; }
+
+        .oh-badge {
+            display: inline-block;
+            padding: 4px 12px; border-radius: 999px;
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.8px;
+            flex-shrink: 0;
+        }
+        .badge-paid       { background: #d4f4e8; color: #0e7a52; }
+        .badge-pending    { background: #fff3cd; color: #856404; }
+        .badge-processing { background: #e3d9f9; color: #5b21b6; }
+        .badge-shipped    { background: #cce5ff; color: #004085; }
+        .badge-delivered  { background: #d4edda; color: #155724; }
+        .badge-cancelled  { background: #fde8e8; color: #9b1c1c; }
+
+        .oh-preview {
+            font-size: 12.5px; color: var(--text-muted);
+            margin: 0 0 12px 0; padding: 8px 12px;
+            background: rgba(201,151,58,0.05);
+            border-radius: 10px; border-left: 3px solid rgba(201,151,58,0.35);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .oh-footer { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+        .oh-meta   { display:flex; align-items:baseline; gap:12px; }
+        .oh-items  { font-size: 12px; color: var(--text-muted); }
+        .oh-total  { font-size: 20px; font-weight: 700; color: var(--brown); font-family: var(--font-serif); }
+
+        .oh-invoice-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 18px; border-radius: 999px;
+            background: var(--brown); color: #fff;
+            border: none; cursor: pointer; font-size: 13px; font-weight: 600;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .oh-invoice-btn:hover { background: var(--gold); transform: scale(1.04); }
+
+        .empty-state { text-align: center; padding: 60px 0; }
+
+        @media(max-width: 900px) {
+            .profile-section { grid-template-columns: 1fr; }
+            .profile-sidebar { position: static; }
+        }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🐾</span>
+                <span class="logo-text">Petify</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Shop</a>
+            </div>
+            <div class="nav-actions">
+                <a href="products.html" class="icon-btn" title="Search products">🔍</a>
+                <button class="cart-pill-btn" onclick="document.getElementById('cart-overlay').classList.add('active'); document.getElementById('cart-drawer').classList.add('active');">
+                    <span>Cart</span>
+                    <div class="cart-badge" id="cart-count">0</div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <main id="main-content">
+        <section class="profile-section">
+            <aside class="profile-sidebar">
+                <div class="avatar-circle" id="user-initial">P</div>
+                <h2 class="profile-name" id="user-name">User Name</h2>
+                <p class="profile-email" id="user-email">user@example.com</p>
+                
+                <div class="profile-nav">
+                    <button class="active" onclick="showTab('orders')">Order History</button>
+                    <button onclick="showTab('wishlist')">Saved Items</button>
+                    <button onclick="showTab('addresses')">My Addresses</button>
+                    <button onclick="showTab('settings')">Account Settings</button>
+                    <button class="logout-btn" onclick="logoutUser()">Log Out</button>
+                </div>
+            </aside>
+
+            <div class="profile-content">
+                <!-- Orders Tab -->
+                <div id="tab-orders">
+                    <div class="content-header">
+                        <h2>Order History</h2>
+                    </div>
+                    
+                    <div class="orders-list" id="orders-list">
+                        <div style="text-align:center; padding: 40px 0;">Loading orders...</div>
+                    </div>
+                </div>
+
+                <!-- Addresses Tab -->
+                <div id="tab-addresses" style="display:none;">
+                    <div class="content-header">
+                        <h2>My Addresses</h2>
+                        <button class="settings-save-btn" style="font-size:13px;padding:10px 20px;" onclick="openAddressForm()">
+                            + Add New Address
+                        </button>
+                    </div>
+
+                    <!-- Address Form (hidden by default) -->
+                    <div id="addr-form-wrap" style="display:none; background:var(--ivory); border-radius:16px; padding:24px; margin-bottom:24px; border:1px solid var(--ivory3);">
+                        <h3 style="font-family:var(--font-serif);font-size:18px;color:var(--brown);margin-bottom:20px;" id="addr-form-title">New Address</h3>
+                        <div class="settings-form-grid">
+                            <div class="settings-field">
+                                <label class="s-label">Full Name</label>
+                                <input type="text" id="af-name" class="s-input" placeholder="e.g. Rahul Sharma">
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">Phone</label>
+                                <input type="tel" id="af-phone" class="s-input" placeholder="10-digit mobile number">
+                            </div>
+                            <div class="settings-field settings-field-full">
+                                <label class="s-label">Address Line</label>
+                                <input type="text" id="af-line1" class="s-input" placeholder="House no., Street, Area">
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">City</label>
+                                <input type="text" id="af-city" class="s-input" placeholder="e.g. Mumbai">
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">State</label>
+                                <input type="text" id="af-state" class="s-input" placeholder="e.g. Maharashtra">
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">Pincode</label>
+                                <input type="text" id="af-pincode" class="s-input" placeholder="6-digit pincode">
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-top:16px;">
+                            <button class="settings-save-btn" onclick="saveAddress()" id="addr-save-btn">Save Address</button>
+                            <button onclick="closeAddressForm()" style="padding:10px 20px;border-radius:12px;border:1.5px solid var(--ivory3);background:transparent;color:var(--text-muted);font-size:14px;cursor:pointer;">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div id="addresses-list"><div style="text-align:center;padding:30px;color:var(--text-muted);font-size:14px;">Loading addresses...</div></div>
+                </div>
+
+                <!-- Wishlist Tab -->
+                <div id="tab-wishlist" style="display:none;">
+                    <div class="content-header">
+                        <h2>Saved Items</h2>
+                    </div>
+                    <div id="wishlist-container">
+                        <div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:14px;">Loading...</div>
+                    </div>
+
+                    <style>
+                        @keyframes heartPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+                        .wl-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:16px; }
+                        .wl-card {
+                            background:#fff; border:1px solid rgba(201,151,58,0.12);
+                            border-radius:16px; overflow:hidden;
+                            box-shadow:0 2px 10px rgba(74,40,16,0.06);
+                            transition: transform 0.2s, box-shadow 0.2s; cursor:pointer;
+                        }
+                        .wl-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(201,151,58,0.15); }
+                        .wl-img {
+                            width:100%; aspect-ratio:1;
+                            background:rgba(201,151,58,0.07);
+                            display:flex; align-items:center; justify-content:center;
+                            position:relative; overflow:hidden;
+                        }
+                        .wl-img img { width:100%; height:100%; object-fit:cover; }
+                        .wl-remove {
+                            position:absolute; top:8px; right:8px;
+                            width:28px; height:28px; border-radius:50%;
+                            background:rgba(255,255,255,0.85); border:none;
+                            cursor:pointer; display:flex; align-items:center; justify-content:center;
+                            font-size:14px; transition:background 0.2s;
+                        }
+                        .wl-remove:hover { background:#fff; }
+                        .wl-info { padding:12px; }
+                        .wl-cat  { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:4px; }
+                        .wl-name { font-size:13px; font-weight:600; color:var(--brown); margin-bottom:8px; line-height:1.3; }
+                        .wl-price { font-size:15px; font-weight:700; color:var(--gold); margin-bottom:10px; }
+                        .wl-atc  {
+                            width:100%; padding:8px; border-radius:8px;
+                            background:var(--brown); color:#fff; border:none;
+                            font-size:12px; font-weight:600; cursor:pointer;
+                            transition:background 0.2s;
+                        }
+                        .wl-atc:hover { background:var(--gold); }
+                    </style>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="tab-settings" style="display:none;">
+                    <div class="content-header">
+                        <h2>Account Settings</h2>
+                    </div>
+
+                    <!-- Personal Info Card -->
+                    <div class="settings-card">
+                        <div class="settings-section-label">
+                            <span>👤</span>
+                            <span>Personal Information</span>
+                        </div>
+                        <div class="settings-form-grid">
+                            <div class="settings-field">
+                                <label class="s-label">Full Name</label>
+                                <input type="text" id="s-name" class="s-input" placeholder="Your full name">
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">Phone Number</label>
+                                <input type="tel" id="s-phone" class="s-input" placeholder="e.g. 9876543210">
+                            </div>
+                            <div class="settings-field settings-field-full">
+                                <label class="s-label">Email Address</label>
+                                <input type="email" id="s-email" class="s-input" disabled>
+                                <p class="s-hint">🔒 Email address cannot be changed.</p>
+                            </div>
+                        </div>
+                        <button class="settings-save-btn" onclick="saveProfile()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                            Save Changes
+                        </button>
+                    </div>
+
+                    <!-- Change Password Card -->
+                    <div class="settings-card" style="margin-top:20px;">
+                        <div class="settings-section-label">
+                            <span>🔐</span>
+                            <span>Change Password</span>
+                        </div>
+                        <div class="settings-form-grid">
+                            <div class="settings-field">
+                                <label class="s-label">New Password</label>
+                                <div class="pwd-wrap">
+                                    <input type="password" id="s-newpwd" class="s-input" placeholder="Min. 8 characters">
+                                    <button type="button" class="pwd-toggle" onclick="togglePwd('s-newpwd',this)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="settings-field">
+                                <label class="s-label">Confirm Password</label>
+                                <div class="pwd-wrap">
+                                    <input type="password" id="s-confirmpwd" class="s-input" placeholder="Re-enter new password">
+                                    <button type="button" class="pwd-toggle" onclick="togglePwd('s-confirmpwd',this)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="settings-save-btn" onclick="savePassword()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            Update Password
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- CART DRAWER -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="document.getElementById('cart-overlay').classList.remove('active'); document.getElementById('cart-drawer').classList.remove('active');">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-total-row"><span>Total</span><span id="cart-total-price">₹0</span></div>
+            <button class="btn-primary full-width" onclick="window.location.href='checkout.html'">Checkout →</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('petify_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const user = await API.getProfile();
+                _cachedUser = user;
+                document.getElementById('user-name').textContent = user.name;
+                document.getElementById('user-email').textContent = user.email;
+                document.getElementById('user-initial').textContent = user.name.charAt(0).toUpperCase();
+
+                loadOrders();
+            } catch(e) {
+                console.error(e);
+                logoutUser();
+            }
+        });
+
+        async function loadOrders() {
+            const list = document.getElementById('orders-list');
+            try {
+                const orders = await API.getMyOrders();
+                
+                if(orders.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <div style="font-size:52px; margin-bottom:16px; opacity:0.35;">📦</div>
+                            <p style="font-size:16px; font-weight:600; color:var(--brown); margin-bottom:8px;">No orders yet</p>
+                            <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px;">Looks like you haven't placed any orders yet.</p>
+                            <button class="btn-primary" style="padding:10px 28px; font-size:14px;" onclick="window.location.href='products.html'">Start Shopping →</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                list.innerHTML = orders.map((o, idx) => {
+                    const date = new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                    const time = new Date(o.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                    const isPaid = o.isPaid || o.payment?.status === 'paid';
+                    const status = o.status || (isPaid ? 'confirmed' : 'pending');
+                    const statusMap = {
+                        paid:       { label:'Paid',       cls:'badge-paid' },
+                        confirmed:  { label:'Confirmed',  cls:'badge-paid' },
+                        pending:    { label:'Pending',    cls:'badge-pending' },
+                        processing: { label:'Processing', cls:'badge-processing' },
+                        shipped:    { label:'Shipped',    cls:'badge-shipped' },
+                        delivered:  { label:'Delivered',  cls:'badge-delivered' },
+                        cancelled:  { label:'Cancelled',  cls:'badge-cancelled' },
+                    };
+                    const badge = isPaid ? statusMap['paid'] : (statusMap[status] || statusMap['pending']);
+                    const total = o.total ?? o.totalPrice ?? 0;
+                    const itemCount = o.items?.length || 0;
+                    const preview = (o.items || []).slice(0,2).map(i => i.name || '').filter(Boolean).join(', ');
+
+                    return `
+                        <div class="oh-card" style="animation-delay:${idx * 0.07}s">
+                            <div class="oh-header">
+                                <div class="oh-left">
+                                    <span class="oh-icon">🛍️</span>
+                                    <div>
+                                        <div class="oh-orderno">Order #${o._id.slice(-8).toUpperCase()}</div>
+                                        <div class="oh-date">${date} &nbsp;·&nbsp; ${time}</div>
+                                    </div>
+                                </div>
+                                <span class="oh-badge ${badge.cls}">${badge.label}</span>
+                            </div>
+
+                            ${preview ? `<div class="oh-preview">${preview}${itemCount > 2 ? ` +${itemCount-2} more` : ''}</div>` : ''}
+
+                            <div class="oh-footer">
+                                <div class="oh-meta">
+                                    <span class="oh-items">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
+                                    <span class="oh-total">₹${Number(total).toLocaleString('en-IN')}</span>
+                                </div>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    ${['pending','confirmed'].includes(status) ? `
+                                    <button onclick="cancelOrder('${o._id}', this)" style="padding:7px 14px;border-radius:999px;background:transparent;border:1.5px solid rgba(220,53,69,0.4);color:#dc3545;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(220,53,69,0.08)'" onmouseout="this.style.background='transparent'">
+                                        Cancel
+                                    </button>` : ''}
+                                    <button class="oh-invoice-btn" onclick="downloadInvoice('${o._id}')">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        Invoice
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch(e) {
+                console.error(e);
+                list.innerHTML = '<p style="color:var(--red); font-size:14px;">Failed to load orders. Please try again.</p>';
+            }
+        }
+
+        async function downloadInvoice(orderId) {
+            try {
+                showToast("Emailing Invoice pdf...");
+                await API.emailInvoice(orderId);
+                showToast("Invoice sent to your email successfully!");
+            } catch(e) {
+                showToast("Failed to email invoice. Backend mailer might not be configured in demo mode.");
+            }
+        }
+
+        window.cancelOrder = async function(orderId, btn) {
+            if (!confirm('Are you sure you want to cancel this order?')) return;
+            btn.textContent = 'Cancelling...';
+            btn.disabled = true;
+            try {
+                await API.cancelOrder(orderId);
+                showToast('✅ Order cancelled successfully.');
+                loadOrders();
+            } catch(e) {
+                showToast('❌ ' + (e.message || 'Failed to cancel order.'));
+                btn.textContent = 'Cancel';
+                btn.disabled = false;
+            }
+        };
+
+        // Cache user data for settings pre-fill
+        let _cachedUser = null;
+
+        window.showTab = function(tab) {
+            document.querySelectorAll('.profile-nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            ['orders','wishlist','addresses','settings'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.style.display = 'none';
+            });
+            
+            document.getElementById('tab-' + tab).style.display = 'block';
+
+            if (tab === 'settings' && _cachedUser) {
+                document.getElementById('s-name').value  = _cachedUser.name  || '';
+                document.getElementById('s-phone').value = _cachedUser.phone || '';
+                document.getElementById('s-email').value = _cachedUser.email || '';
+            }
+            if (tab === 'wishlist')   loadWishlist();
+            if (tab === 'addresses')  loadAddresses();
+        };
+
+        // ── Address Management ────────────────────────────────────────
+        let _editAddrIndex = null;
+
+        async function loadAddresses() {
+            const list = document.getElementById('addresses-list');
+            try {
+                const user = await API.getProfile();
+                const addresses = user.address || [];
+                if (addresses.length === 0) {
+                    list.innerHTML = `
+                        <div style="text-align:center;padding:50px 20px;">
+                            <div style="font-size:48px;margin-bottom:16px;">📍</div>
+                            <h3 style="font-family:var(--font-serif);font-size:20px;color:var(--brown);margin-bottom:8px;">No saved addresses</h3>
+                            <p style="font-size:13px;color:var(--text-muted);">Add a delivery address to speed up checkout.</p>
+                        </div>`;
+                    return;
+                }
+                list.innerHTML = addresses.map((a, i) => `
+                    <div style="background:var(--ivory);border-radius:16px;padding:20px 24px;margin-bottom:14px;border:1px solid var(--ivory3);display:flex;justify-content:space-between;align-items:flex-start;">
+                        <div>
+                            <div style="font-weight:600;color:var(--brown);margin-bottom:4px;">${a.fullName || ''}</div>
+                            <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+                                ${a.line1 || ''}<br>
+                                ${a.city || ''}, ${a.state || ''} - ${a.pincode || ''}<br>
+                                📞 ${a.phone || ''}
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;flex-shrink:0;margin-left:16px;">
+                            <button onclick="editAddress(${i})" style="padding:7px 16px;border-radius:10px;border:1.5px solid rgba(201,151,58,0.4);background:transparent;color:var(--brown);font-size:12px;font-weight:600;cursor:pointer;">Edit</button>
+                            <button onclick="deleteAddress(${i})" style="padding:7px 16px;border-radius:10px;border:1.5px solid rgba(220,53,69,0.4);background:transparent;color:#dc3545;font-size:12px;font-weight:600;cursor:pointer;">Delete</button>
+                        </div>
+                    </div>`).join('');
+            } catch(e) {
+                list.innerHTML = '<p style="color:var(--red);font-size:14px;">Failed to load addresses.</p>';
+            }
+        }
+
+        window.openAddressForm = function(idx = null) {
+            _editAddrIndex = idx;
+            document.getElementById('addr-form-title').textContent = idx !== null ? 'Edit Address' : 'New Address';
+            document.getElementById('addr-save-btn').textContent   = idx !== null ? 'Update Address' : 'Save Address';
+            // Clear
+            ['af-name','af-phone','af-line1','af-city','af-state','af-pincode'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('addr-form-wrap').style.display = 'block';
+            document.getElementById('addr-form-wrap').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.editAddress = async function(idx) {
+            const user = await API.getProfile();
+            const a = (user.address || [])[idx];
+            if (!a) return;
+            openAddressForm(idx);
+            document.getElementById('af-name').value   = a.fullName || '';
+            document.getElementById('af-phone').value  = a.phone    || '';
+            document.getElementById('af-line1').value  = a.line1    || '';
+            document.getElementById('af-city').value   = a.city     || '';
+            document.getElementById('af-state').value  = a.state    || '';
+            document.getElementById('af-pincode').value = a.pincode || '';
+        };
+
+        window.closeAddressForm = function() {
+            document.getElementById('addr-form-wrap').style.display = 'none';
+            _editAddrIndex = null;
+        };
+
+        window.saveAddress = async function() {
+            const data = {
+                fullName: document.getElementById('af-name').value.trim(),
+                phone:    document.getElementById('af-phone').value.trim(),
+                line1:    document.getElementById('af-line1').value.trim(),
+                city:     document.getElementById('af-city').value.trim(),
+                state:    document.getElementById('af-state').value.trim(),
+                pincode:  document.getElementById('af-pincode').value.trim(),
+            };
+            if (!data.fullName || !data.line1 || !data.city || !data.pincode) {
+                showToast('❌ Please fill in all required fields.'); return;
+            }
+            try {
+                if (_editAddrIndex !== null) {
+                    await API.updateAddress(_editAddrIndex, data);
+                    showToast('✅ Address updated!');
+                } else {
+                    await API.addAddress(data);
+                    showToast('✅ Address saved!');
+                }
+                closeAddressForm();
+                loadAddresses();
+            } catch(e) {
+                showToast('❌ ' + (e.message || 'Failed to save address.'));
+            }
+        };
+
+        window.deleteAddress = async function(idx) {
+            if (!confirm('Delete this address?')) return;
+            try {
+                await API.deleteAddress(idx);
+                showToast('✅ Address deleted.');
+                loadAddresses();
+            } catch(e) {
+                showToast('❌ Failed to delete address.');
+            }
+        };
+
+        async function loadWishlist() {
+            const container = document.getElementById('wishlist-container');
+            container.innerHTML = `<div style="text-align:center; padding:40px 0; color:var(--text-muted); font-size:14px;">Loading saved items...</div>`;
+            try {
+                const items = await API.getWishlist();
+                if (!items || items.length === 0) {
+                    container.innerHTML = `
+                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:50px 20px; text-align:center;">
+                            <div style="width:90px;height:90px;background:linear-gradient(135deg,rgba(201,151,58,0.12),rgba(74,40,16,0.06));border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;animation:heartPulse 2.4s ease-in-out infinite;">
+                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="rgba(201,151,58,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            </div>
+                            <h3 style="font-family:var(--font-serif);font-size:20px;color:var(--brown);margin-bottom:8px;">Nothing saved yet</h3>
+                            <p style="font-size:13px;color:var(--text-muted);max-width:260px;line-height:1.6;margin-bottom:24px;">Tap the ❤️ on any product to save it here.</p>
+                            <button onclick="window.location.href='products.html'" style="display:inline-flex;align-items:center;gap:8px;padding:11px 26px;border-radius:999px;background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;">Explore Products →</button>
+                        </div>`;
+                    return;
+                }
+                container.innerHTML = `<div class="wl-grid">${items.map(p => {
+                    const img = p.images && p.images.length > 0
+                        ? `<img src="${p.images[0]}" alt="${p.name}">`
+                        : `<span style="font-size:36px;">${p.emoji || '🐾'}</span>`;
+                    return `
+                        <div class="wl-card" onclick="window.location.href='product-detail.html?id=${p._id}'">
+                            <div class="wl-img">
+                                ${img}
+                                <button class="wl-remove" onclick="event.stopPropagation(); removeFromWishlist('${p._id}', this)" title="Remove">❤️</button>
+                            </div>
+                            <div class="wl-info">
+                                <div class="wl-cat">${p.category || ''}</div>
+                                <div class="wl-name">${p.name}</div>
+                                <div class="wl-price">₹${p.price?.toLocaleString('en-IN')}</div>
+                                <button class="wl-atc" onclick="event.stopPropagation(); cartManager.addToCart('${p._id}', 1)">+ Add to Cart</button>
+                            </div>
+                        </div>`;
+                }).join('')}</div>`;
+            } catch(e) {
+                container.innerHTML = `<p style="color:var(--red);font-size:14px;padding:20px 0;">Failed to load saved items.</p>`;
+            }
+        }
+
+        window.removeFromWishlist = async function(productId, btn) {
+            try {
+                await API.toggleWishlist(productId);
+                // Remove with animation
+                const card = btn.closest('.wl-card');
+                card.style.transition = 'opacity 0.3s, transform 0.3s';
+                card.style.opacity = '0'; card.style.transform = 'scale(0.9)';
+                setTimeout(() => loadWishlist(), 350);
+            } catch(e) {
+                showToast('Failed to remove item.');
+            }
+        };
+
+        window.saveProfile = async function() {
+            const name  = document.getElementById('s-name').value.trim();
+            const phone = document.getElementById('s-phone').value.trim();
+            if (!name) { showToast('❌ Name cannot be empty.'); return; }
+            try {
+                const updated = await API.updateProfile({ name, phone });
+                _cachedUser = { ..._cachedUser, name: updated.name, phone: updated.phone };
+                document.getElementById('user-name').textContent = updated.name;
+                document.getElementById('user-initial').textContent = updated.name.charAt(0).toUpperCase();
+                if (updated.token) localStorage.setItem('petify_token', updated.token);
+                showToast('✅ Profile updated successfully!');
+            } catch(e) {
+                showToast('❌ ' + (e.message || 'Failed to update profile.'));
+            }
+        };
+
+        window.savePassword = async function() {
+            const newPwd     = document.getElementById('s-newpwd').value;
+            const confirmPwd = document.getElementById('s-confirmpwd').value;
+            if (newPwd.length < 8)          { showToast('❌ Password must be at least 8 characters.'); return; }
+            if (newPwd !== confirmPwd)       { showToast('❌ Passwords do not match.'); return; }
+            try {
+                const updated = await API.updateProfile({ password: newPwd });
+                if (updated.token) localStorage.setItem('petify_token', updated.token);
+                document.getElementById('s-newpwd').value     = '';
+                document.getElementById('s-confirmpwd').value = '';
+                showToast('✅ Password changed successfully!');
+            } catch(e) {
+                showToast('❌ ' + (e.message || 'Failed to change password.'));
+            }
+        };
+
+        window.togglePwd = function(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.style.opacity = '1';
+            } else {
+                input.type = 'password';
+                btn.style.opacity = '0.6';
+            }
+        };
+
+        window.logoutUser = function() {
+            localStorage.removeItem('petify_token');
+            localStorage.removeItem('petify_user');
+            window.location.href = 'index.html';
+        };
+    </script>
+
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
