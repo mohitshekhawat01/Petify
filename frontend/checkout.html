@@ -42,6 +42,41 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
+
+        @media (max-width: 600px) {
+            .checkout-section {
+                grid-template-columns: 1fr !important;
+                padding: 90px 16px 60px !important;
+                gap: 20px !important;
+            }
+            .checkout-form {
+                padding: 24px 16px !important;
+                border-radius: 16px !important;
+            }
+            .order-summary {
+                padding: 24px 16px !important;
+                position: static !important;
+                border-radius: 16px !important;
+            }
+            /* First Name / Last Name — single column */
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+            /* City / State / Postal Code row — single column */
+            .form-row[style*="1fr 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            /* Shipping address label + locate button — stack vertically */
+            .form-group > div[style*="justify-content: space-between"],
+            .form-group > div[style*="space-between"] {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+            }
+            #locate-btn { width: 100% !important; justify-content: center !important; }
+        }
+
         .form-label {
             display: block;
             font-size: 13px;
