@@ -211,11 +211,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Mobile Menu
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+
+    function closeMobileDrawer() {
+        mobileDrawer?.classList.remove('active');
+        mobileBtn?.classList.remove('open');
+        if (drawerOverlay) drawerOverlay.style.display = 'none';
+    }
+
+    // Make it global so the ✕ button and overlay can call it
+    window.closeMobileDrawer = closeMobileDrawer;
+
     if (mobileBtn && mobileDrawer) {
         mobileBtn.addEventListener('click', () => {
-            mobileDrawer.classList.toggle('active');
+            const isOpen = mobileDrawer.classList.toggle('active');
+            mobileBtn.classList.toggle('open');
+            if (drawerOverlay) drawerOverlay.style.display = isOpen ? 'block' : 'none';
         });
     }
+
 
     // Initialize homepage features if we are on index
     if (document.getElementById('best-sellers-grid')) {
