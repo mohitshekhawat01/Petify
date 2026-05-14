@@ -110,24 +110,46 @@
     #nav-auth-btn { padding: 6px 12px !important; font-size: 12px !important; }
 
     /* ── HERO — fix dog canvas overflow ── */
-    .hp-hero { min-height: 100svh; overflow: hidden; }
+    .hp-hero {
+        height: 100svh !important;
+        min-height: unset !important;
+        overflow: hidden;
+    }
 
-    /* Scale down the 600x600 canvas to fit mobile */
+    /* Hide the big PETIFY text on mobile — too distracting */
+    .hp-big-text { display: none !important; }
+
+    /* Orange stripe — stays in middle */
+    .hp-bg-stripe { height: 32vh !important; }
+
+    /* Dog canvas — scale to fit nicely */
     .hp-center-dog {
-        width: 280px !important;
-        height: 280px !important;
+        width: 260px !important;
+        height: 260px !important;
+        top: 45% !important;
     }
     .hp-center-dog canvas {
-        width: 280px !important;
-        height: 280px !important;
+        width: 260px !important;
+        height: 260px !important;
     }
 
-    /* Scale PETIFY big text for mobile */
-    .hp-big-text {
-        font-size: clamp(52px, 18vw, 90px) !important;
-        gap: 0 !important;
-        letter-spacing: -1px !important;
+    /* Intro video — fill portrait screen */
+    #intro-sequence {
+        width: 100vw !important;
+        height: 100svh !important;
     }
+    .intro-video video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    .intro-text {
+        width: 90% !important;
+        text-align: center !important;
+        font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
+        padding: 1rem 1.5rem !important;
+    }
+    #skip-intro { bottom: 30px !important; right: 20px !important; }
 
     /* Bottom section — stack vertically */
     .hp-bottom {
