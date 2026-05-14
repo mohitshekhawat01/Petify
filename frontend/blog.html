@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>??</text></svg>">
-    <title>Blog — Petify ??</title>
+    <title>Blog ? Petify ??</title>
     <meta name="description" content="Expert pet care tips, nutrition guides, and heartwarming stories from India's most luxurious pet boutique.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,6 +188,18 @@
             </div>
         </div>
     </nav>
+    <!-- Mobile Drawer Overlay -->
+    <div id="drawer-overlay" onclick="closeMobileDrawer()" style="display:none;position:fixed;inset:0;z-index:998;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);"></div>
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <button onclick="closeMobileDrawer()" style="position:absolute;top:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--ivory3);border:none;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--brown);cursor:pointer;">?</button>
+        <a href="index.html">Home</a>
+        <a href="products.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="profile.html">My Profile</a>
+        <a href="login.html">Login</a>
+    </div>
 
     <div id="toast-container"></div>
 
@@ -203,8 +215,8 @@
         <div class="cat-chip active" onclick="filterPosts('All', this)">All Posts</div>
         <div class="cat-chip" onclick="filterPosts('Nutrition', this)">?? Nutrition</div>
         <div class="cat-chip" onclick="filterPosts('Training', this)">?? Training</div>
-        <div class="cat-chip" onclick="filterPosts('Health', this)">?? Health & Wellness</div>
-        <div class="cat-chip" onclick="filterPosts('Lifestyle', this)">? Pet Lifestyle</div>
+        <div class="cat-chip" onclick="filterPosts('Health', this)">?? Health &amp; Wellness</div>
+        <div class="cat-chip" onclick="filterPosts('Lifestyle', this)">?? Pet Lifestyle</div>
         <div class="cat-chip" onclick="filterPosts('Reviews', this)">? Product Reviews</div>
     </div>
 
@@ -218,10 +230,10 @@
                     <div class="meta-avatar">????</div>
                     <div class="meta-text">
                         <strong>Dr. Priya Nair</strong>
-                        March 20, 2026 · 8 min read
+                        March 20, 2026 ? 8 min read
                     </div>
                 </div>
-                <p>From the right protein ratios for small breeds to grain-free myths debunked — everything Indian pet parents need to know about feeding their puppy right.</p>
+                <p>From the right protein ratios for small breeds to grain-free myths debunked ? everything Indian pet parents need to know about feeding their puppy right.</p>
                 <a href="#" class="btn-read" onclick="openArticle('puppy-nutrition'); return false;">Read Article ?</a>
             </div>
             <div class="featured-img">??</div>
@@ -243,7 +255,7 @@
                 <div class="blog-card-body">
                     <div class="blog-card-meta"><span>Dr. Priya Nair</span><span class="dot"></span><span>Mar 22</span><span class="dot"></span><span>5 min</span></div>
                     <h3>Signs Your Cat Might Be Dehydrated (And What To Do)</h3>
-                    <p>Cats hide discomfort well. Here are the subtle signs every cat parent should know — and how Petify's wet food range can help.</p>
+                    <p>Cats hide discomfort well. Here are the subtle signs every cat parent should know ? and how Petify's wet food range can help.</p>
                     <div class="read-more" onclick="openArticle('cat-dehydration')">Read More <span>?</span></div>
                 </div>
             </div>
@@ -269,7 +281,7 @@
                 <div class="blog-card-body">
                     <div class="blog-card-meta"><span>Rishabh Sharma</span><span class="dot"></span><span>Mar 14</span><span class="dot"></span><span>4 min</span></div>
                     <h3>How to Create the Perfect Indoor Space for Your Indoor Cat</h3>
-                    <p>Scratching posts, vertical space, hiding nooks — a room designed for a cat is a room your cat will actually use.</p>
+                    <p>Scratching posts, vertical space, hiding nooks ? a room designed for a cat is a room your cat will actually use.</p>
                     <div class="read-more" onclick="openArticle('indoor-cat')">Read More <span>?</span></div>
                 </div>
             </div>
@@ -294,7 +306,7 @@
                 </div>
                 <div class="blog-card-body">
                     <div class="blog-card-meta"><span>Arjun Mehra</span><span class="dot"></span><span>Mar 6</span><span class="dot"></span><span>5 min</span></div>
-                    <h3>We Tested 12 Dog Harnesses — Here Are the Top 3</h3>
+                    <h3>We Tested 12 Dog Harnesses ? Here Are the Top 3</h3>
                     <p>Our team walked over 200km across 6 weeks, testing harnesses on dogs of all sizes. Here's the honest verdict.</p>
                     <div class="read-more" onclick="openArticle('harness-review')">Read More <span>?</span></div>
                 </div>
@@ -308,7 +320,7 @@
                 <div class="blog-card-body">
                     <div class="blog-card-meta"><span>Dr. Priya Nair</span><span class="dot"></span><span>Feb 28</span><span class="dot"></span><span>6 min</span></div>
                     <h3>Tick &amp; Flea Season in India: Your Complete Protection Guide</h3>
-                    <p>With India's humid summers come serious risks. Dr. Priya outlines the prevention protocols that actually work — without harsh chemicals.</p>
+                    <p>With India's humid summers come serious risks. Dr. Priya outlines the prevention protocols that actually work ? without harsh chemicals.</p>
                     <div class="read-more" onclick="openArticle('tick-flea')">Read More <span>?</span></div>
                 </div>
             </div>
@@ -334,7 +346,7 @@
             <div class="footer-col"><h3>Company</h3><a href="about.html">Our Story</a><a href="blog.html">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div>
             <div class="footer-col"><h3>Help</h3><a href="#">Track Order</a><a href="#">Returns</a><a href="#">FAQs</a><a href="#">Privacy</a></div>
         </div>
-        <div class="footer-bottom"><div class="sep-line"></div><p>© 2026 Petify. Crafted with Love. <span class="footer-paws">??????</span></p></div>
+        <div class="footer-bottom"><div class="sep-line"></div><p>? 2026 Petify. Crafted with Love. <span class="footer-paws">??????</span></p></div>
     </footer>
 
     <div class="cart-overlay" id="cart-overlay"></div>
@@ -414,32 +426,32 @@
             'puppy-nutrition': {
                 tag:'Nutrition', emoji:'??', readTime:'8 min read', date:'March 20, 2026', author:'Dr. Priya Nair',
                 title:'The Complete Guide to Puppy Nutrition in India',
-                content:`<p>Feeding a puppy correctly is one of the most important things you can do in their first year. In India, pet parents face unique challenges — from unreliable product labelling to myths spread online.</p>
-                <h3>?? Protein First</h3><p>Puppies need at least <strong>22–28% protein</strong>. Look for named sources like chicken, fish, or lamb as the first ingredient. Avoid vague terms like "meat meal."</p>
+                content:`<p>Feeding a puppy correctly is one of the most important things you can do in their first year. In India, pet parents face unique challenges ? from unreliable product labelling to myths spread online.</p>
+                <h3>?? Protein First</h3><p>Puppies need at least <strong>22?28% protein</strong>. Look for named sources like chicken, fish, or lamb as the first ingredient. Avoid vague terms like "meat meal."</p>
                 <h3>?? The Grain-Free Myth</h3><p>Most puppies do perfectly fine on grain-inclusive diets. Recent studies link grain-free diets to dilated cardiomyopathy (DCM). Always <strong>consult your vet</strong> before switching.</p>
                 <h3>???? Feeding in Indian Climates</h3><p>India's heat increases a puppy's water requirements. Always ensure fresh water is available. Petify's wet food range has no added salt or artificial preservatives.</p>
-                <h3>? Feeding Schedule</h3><ul><li><strong>8–12 weeks:</strong> 4 meals/day</li><li><strong>3–6 months:</strong> 3 meals/day</li><li><strong>6–12 months:</strong> 2 meals/day</li></ul>
-                <h3>? Foods to Avoid Completely</h3><p>Onions, garlic, grapes, chocolate, xylitol, and raw dough are toxic to puppies. Many Indian home-cooked "treats" contain these — always double-check.</p>
-                <p><strong>Bottom line:</strong> Choose vet-approved, age-specific food, keep water available, and schedule checkups every 4–6 weeks. ??</p>`
+                <h3>? Feeding Schedule</h3><ul><li><strong>8?12 weeks:</strong> 4 meals/day</li><li><strong>3?6 months:</strong> 3 meals/day</li><li><strong>6?12 months:</strong> 2 meals/day</li></ul>
+                <h3>? Foods to Avoid Completely</h3><p>Onions, garlic, grapes, chocolate, xylitol, and raw dough are toxic to puppies. Many Indian home-cooked "treats" contain these ? always double-check.</p>
+                <p><strong>Bottom line:</strong> Choose vet-approved, age-specific food, keep water available, and schedule checkups every 4?6 weeks. ??</p>`
             },
             'cat-dehydration': {
                 tag:'Health', emoji:'??', readTime:'5 min read', date:'March 22, 2026', author:'Dr. Priya Nair',
                 title:'Signs Your Cat Might Be Dehydrated (And What To Do)',
-                content:`<p>Cats are notoriously bad at drinking water — a trait from their desert-dwelling ancestors. This makes dehydration a real and common risk, especially in India's hot summers.</p>
+                content:`<p>Cats are notoriously bad at drinking water ? a trait from their desert-dwelling ancestors. This makes dehydration a real and common risk, especially in India's hot summers.</p>
                 <h3>?? Warning Signs</h3><ul>
-                <li><strong>Skin tent test:</strong> Pinch the skin at the back of the neck — if it doesn't spring back quickly, your cat may be dehydrated.</li>
+                <li><strong>Skin tent test:</strong> Pinch the skin at the back of the neck ? if it doesn't spring back quickly, your cat may be dehydrated.</li>
                 <li><strong>Sunken eyes</strong> or dry, pale gums (healthy gums are moist and pink).</li>
                 <li><strong>Lethargy</strong> and reduced activity beyond their usual laziness.</li>
                 <li><strong>Strong-smelling, dark urine</strong> or reduced urination.</li></ul>
-                <h3>?? What To Do</h3><p>Switch partially to wet food, add multiple water stations, or try a pet fountain — cats love running water. For severe symptoms, see your vet immediately.</p>
-                <h3>?? Petify's Wet Food Range</h3><p>Our vet-curated wet food contains up to 78% moisture — providing meaningful hydration with every meal, ideal during summer months. <a href="products.html?category=Cats" style="color:var(--gold)">Browse our cat food ?</a></p>`
+                <h3>?? What To Do</h3><p>Switch partially to wet food, add multiple water stations, or try a pet fountain ? cats love running water. For severe symptoms, see your vet immediately.</p>
+                <h3>?? Petify's Wet Food Range</h3><p>Our vet-curated wet food contains up to 78% moisture ? providing meaningful hydration with every meal, ideal during summer months. <a href="products.html?category=Cats" style="color:var(--gold)">Browse our cat food ?</a></p>`
             },
             'grain-free': {
                 tag:'Nutrition', emoji:'??', readTime:'6 min read', date:'March 18, 2026', author:'Arjun Mehra',
                 title:'Grain-Free vs. Grain-Inclusive: What\'s Right for Your Dog?',
                 content:`<p>Walk into any pet store and you'll find "grain-free" labels front and center. But is it marketing, or real science? The answer is nuanced.</p>
                 <h3>?? What Does "Grain-Free" Mean?</h3><p>Grain-free diets replace grains (rice, wheat) with high-starch alternatives like peas, lentils, and sweet potato. They are <em>not</em> inherently lower in carbohydrates.</p>
-                <h3>?? The DCM Concern</h3><p>In 2019, the FDA flagged a potential link between grain-free diets and dilated cardiomyopathy (DCM) in dogs. Research is ongoing, but many vets recommend caution — especially for breeds predisposed to heart conditions.</p>
+                <h3>?? The DCM Concern</h3><p>In 2019, the FDA flagged a potential link between grain-free diets and dilated cardiomyopathy (DCM) in dogs. Research is ongoing, but many vets recommend caution ? especially for breeds predisposed to heart conditions.</p>
                 <h3>? When Grain-Free Makes Sense</h3><ul><li>Confirmed grain allergy (vet-diagnosed, not assumed).</li><li>Specific digestive sensitivities to wheat or corn.</li><li>Direct vet recommendation.</li></ul>
                 <h3>?? Our Recommendation</h3><p>For most healthy Indian dogs, a high-quality grain-inclusive diet with named protein sources is the safest choice. Petify's dog food range meets this standard across all varieties. <a href="products.html?category=Dogs" style="color:var(--gold)">Browse dog food ?</a></p>`
             },
@@ -450,7 +462,7 @@
                 <h3>?? The 3 Zones Every Cat Home Needs</h3>
                 <p><strong>1. Vertical Space.</strong> Cats feel safest when they can observe from height. Cat trees, wall-mounted shelves, or a cleared bookshelf make great perches. Aim for at least one spot above 5 feet.</p>
                 <p><strong>2. Scratch Zones.</strong> Scratching is non-negotiable. Place posts near sleeping areas and entry points. Both vertical and horizontal scratchers are ideal.</p>
-                <p><strong>3. Hide Spots.</strong> Every cat needs a private retreat — a covered bed, box, or cat cave. This is crucial in multi-pet homes. Never force a cat out of their hiding spot.</p>
+                <p><strong>3. Hide Spots.</strong> Every cat needs a private retreat ? a covered bed, box, or cat cave. This is crucial in multi-pet homes. Never force a cat out of their hiding spot.</p>
                 <h3>?? Mental Stimulation</h3><p>Rotate toys every few days. Puzzle feeders engage the natural hunting instinct. A bird feeder outside a window is free entertainment for hours.</p>
                 <h3>?? Safe Plants Only</h3><p>Many popular houseplants are toxic to cats: lilies, pothos, philodendron. Opt for spider plants, catnip, or cat grass instead. <a href="products.html?category=Cats" style="color:var(--gold)">Browse cat accessories ?</a></p>`
             },
@@ -458,32 +470,32 @@
                 tag:'Training', emoji:'??', readTime:'7 min read', date:'March 10, 2026', author:'Rishabh Sharma',
                 title:'5 Commands Every Dog Should Know by 6 Months',
                 content:`<p>The first six months are a critical learning window. Positive reinforcement training during this period shapes behaviour that lasts a lifetime.</p>
-                <h3>1. ?? Sit</h3><p>Hold a treat near their nose, move your hand up — their bottom will lower. Say "Sit," reward, and repeat 5× daily. This is the foundation of all training.</p>
+                <h3>1. ?? Sit</h3><p>Hold a treat near their nose, move your hand up ? their bottom will lower. Say "Sit," reward, and repeat 5? daily. This is the foundation of all training.</p>
                 <h3>2. ?? Stay</h3><p>Ask your dog to sit. Open your palm and say "Stay." Take a few steps back. Reward even for a 2-second stay and gradually increase duration.</p>
-                <h3>3. ?? Come</h3><p>Put a leash on, crouch down, say "Come" in a happy tone. <strong>Never punish a dog that comes to you</strong> — even if they were misbehaving.</p>
+                <h3>3. ?? Come</h3><p>Put a leash on, crouch down, say "Come" in a happy tone. <strong>Never punish a dog that comes to you</strong> ? even if they were misbehaving.</p>
                 <h3>4. ?? Leave It</h3><p>Place a treat in both hands. Show one fist and say "Leave it." When they stop pawing, give the treat from the other hand. Builds impulse control.</p>
                 <h3>5. ?? Down</h3><p>From "Sit," move a treat from their nose straight to the floor. As they follow it, say "Down" and reward. Useful at vets, in public, and with guests.</p>
                 <p><strong>Golden rule:</strong> Keep sessions under 5 minutes, end on a success. Small pieces of boiled chicken work brilliantly as high-value treats. ??</p>`
             },
             'harness-review': {
                 tag:'Reviews', emoji:'?', readTime:'5 min read', date:'March 6, 2026', author:'Arjun Mehra',
-                title:'We Tested 12 Dog Harnesses — Here Are the Top 3',
+                title:'We Tested 12 Dog Harnesses ? Here Are the Top 3',
                 content:`<p>Over six weeks, our team tested 12 harnesses on dogs from 3kg Chihuahuas to 35kg Labradors, covering 200km+ of walks, hikes, and city commutes.</p>
-                <h3>?? #1 — No-Pull Step-In Mesh Harness</h3><p><strong>Best for:</strong> Small–medium breeds, daily walks. Breathable mesh is essential in Indian summers. Front-clip design discourages pulling without neck strain. Easy step-in design. <strong>Score: 9.4/10</strong></p>
-                <h3>?? #2 — Padded Adventure Harness</h3><p><strong>Best for:</strong> Medium–large breeds, active dogs. Dual-clip (front and back), reinforced stitching, top handle for quick control. Padding prevents chafing. <strong>Score: 9.1/10</strong></p>
-                <h3>?? #3 — Reflective Night-Safe Harness</h3><p><strong>Best for:</strong> Dogs walked in low-light. 360° reflective strips visible up to 150m. Adjustable across 3 points for a secure fit. <strong>Score: 8.7/10</strong></p>
-                <h3>? What to Avoid</h3><p>Three harnesses caused chafing within 2 weeks — all were thin, single-strap designs with no chest padding. Avoid any harness with only one adjustment point. <a href="products.html?category=Dogs" style="color:var(--gold)">Browse harnesses ?</a></p>`
+                <h3>?? #1 ? No-Pull Step-In Mesh Harness</h3><p><strong>Best for:</strong> Small?medium breeds, daily walks. Breathable mesh is essential in Indian summers. Front-clip design discourages pulling without neck strain. Easy step-in design. <strong>Score: 9.4/10</strong></p>
+                <h3>?? #2 ? Padded Adventure Harness</h3><p><strong>Best for:</strong> Medium?large breeds, active dogs. Dual-clip (front and back), reinforced stitching, top handle for quick control. Padding prevents chafing. <strong>Score: 9.1/10</strong></p>
+                <h3>?? #3 ? Reflective Night-Safe Harness</h3><p><strong>Best for:</strong> Dogs walked in low-light. 360? reflective strips visible up to 150m. Adjustable across 3 points for a secure fit. <strong>Score: 8.7/10</strong></p>
+                <h3>? What to Avoid</h3><p>Three harnesses caused chafing within 2 weeks ? all were thin, single-strap designs with no chest padding. Avoid any harness with only one adjustment point. <a href="products.html?category=Dogs" style="color:var(--gold)">Browse harnesses ?</a></p>`
             },
             'tick-flea': {
                 tag:'Health', emoji:'??', readTime:'6 min read', date:'February 28, 2026', author:'Dr. Priya Nair',
                 title:'Tick & Flea Season in India: Your Complete Protection Guide',
                 content:`<p>India's monsoon months create ideal breeding conditions for ticks and fleas. These carry serious diseases including Ehrlichiosis and Babesiosis. Prevention is far easier than treatment.</p>
-                <h3>?? Peak Risk Months</h3><p>July–October are highest risk. In Kerala, Tamil Nadu, and Goa, year-round prevention is strongly advised. Even indoor pets can pick up fleas from clothing or other animals.</p>
+                <h3>?? Peak Risk Months</h3><p>July?October are highest risk. In Kerala, Tamil Nadu, and Goa, year-round prevention is strongly advised. Even indoor pets can pick up fleas from clothing or other animals.</p>
                 <h3>??? Prevention That Works</h3>
-                <p><strong>1. Monthly spot-on treatments</strong> (like Frontline or Revolution) are the gold standard — applied to the neck, killing ticks and fleas for 4 weeks.</p>
-                <p><strong>2. Tick collars</strong> like Seresto provide 8 months of continuous protection — ideal for dogs with frequent outdoor exposure.</p>
-                <p><strong>3. Regular grooming</strong> — brush after every outdoor walk. Check ears, paws, armpits, and around the collar. A flea comb is inexpensive and excellent for early detection.</p>
-                <h3>?? Natural Options</h3><p>Neem oil and diluted ACV have mild repellent properties but are NOT effective standalone prevention in high-risk areas. They can supplement — not replace — other methods.</p>
+                <p><strong>1. Monthly spot-on treatments</strong> (like Frontline or Revolution) are the gold standard ? applied to the neck, killing ticks and fleas for 4 weeks.</p>
+                <p><strong>2. Tick collars</strong> like Seresto provide 8 months of continuous protection ? ideal for dogs with frequent outdoor exposure.</p>
+                <p><strong>3. Regular grooming</strong> ? brush after every outdoor walk. Check ears, paws, armpits, and around the collar. A flea comb is inexpensive and excellent for early detection.</p>
+                <h3>?? Natural Options</h3><p>Neem oil and diluted ACV have mild repellent properties but are NOT effective standalone prevention in high-risk areas. They can supplement ? not replace ? other methods.</p>
                 <h3>?? If You See Ticks</h3><p>Use fine-tipped tweezers, grasp close to the skin, pull steadily upward. Disinfect and monitor for fever or lethargy for 2 weeks. If symptoms appear ? vet immediately. <a href="products.html?category=Dogs" style="color:var(--gold)">Browse grooming products ?</a></p>`
             }
         };
@@ -496,7 +508,7 @@
                     <div id="am-tag-wrap"><span id="am-tag"></span></div>
                     <div id="am-emoji-wrap"><span id="am-emoji"></span></div>
                     <div id="am-title"></div>
-                    <div id="am-meta"><span id="am-author"></span> · <span id="am-date"></span></div>
+                    <div id="am-meta"><span id="am-author"></span> ? <span id="am-date"></span></div>
                 </div>
                 <div id="am-body"></div>
             </div>`;
@@ -507,7 +519,7 @@
             document.getElementById('am-emoji').textContent  = a.emoji;
             document.getElementById('am-title').textContent  = a.title;
             document.getElementById('am-author').textContent = a.author;
-            document.getElementById('am-date').textContent   = a.date + ' · ' + a.readTime;
+            document.getElementById('am-date').textContent   = a.date + ' ? ' + a.readTime;
             document.getElementById('am-body').innerHTML     = a.content;
             document.getElementById('article-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
