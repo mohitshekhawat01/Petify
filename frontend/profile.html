@@ -261,8 +261,14 @@
         .empty-state { text-align: center; padding: 60px 0; }
 
         @media(max-width: 900px) {
-            .profile-section { grid-template-columns: 1fr; }
-            .profile-sidebar { position: static; }
+            .profile-section { grid-template-columns: 1fr; padding: 100px 16px 60px !important; gap: 20px !important; }
+            .profile-sidebar { position: static; width: 100% !important; }
+            .profile-nav { flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+            .profile-nav-btn { white-space: nowrap !important; flex-shrink: 0 !important; }
+        }
+        @media(max-width: 480px) {
+            .profile-section { padding: 90px 12px 50px !important; }
+            .order-card { flex-direction: column !important; }
         }
     </style>
 

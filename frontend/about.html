@@ -176,6 +176,48 @@
         .section-h2.white { color: #fff; }
         .section-sub { color: var(--text-muted); font-size: 16px; max-width: 560px; line-height: 1.8; }
         .section-sub.white { color: rgba(255,255,255,0.55); }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .about-hero { padding: 110px 20px 70px !important; min-height: auto !important; }
+            .about-hero h1 { font-size: clamp(36px, 9vw, 64px) !important; }
+            .about-hero p { font-size: 15px !important; }
+
+            .stats-strip { grid-template-columns: repeat(2, 1fr) !important; padding: 40px 20px !important; gap: 30px !important; }
+            .stat-num { font-size: 38px !important; }
+
+            .about-section { padding: 60px 20px !important; }
+            .about-section.dark { padding: 60px 20px !important; }
+
+            .story-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+            .story-text h2 { font-size: 32px !important; }
+
+            .values-grid { grid-template-columns: 1fr 1fr !important; gap: 16px !important; margin-top: 30px !important; }
+            .value-card { padding: 24px 20px !important; }
+
+            /* Timeline — simplify to single column */
+            .timeline::before { display: none !important; }
+            .tl-item { grid-template-columns: 44px 1fr !important; gap: 16px !important; margin-bottom: 30px !important; }
+            .tl-item:nth-child(odd) .tl-content,
+            .tl-item:nth-child(even) .tl-content { grid-column: 2 !important; text-align: left !important; }
+            .tl-item:nth-child(odd) .tl-empty,
+            .tl-item:nth-child(even) .tl-empty { display: none !important; }
+            .tl-dot { grid-column: 1 !important; width: 36px !important; height: 36px !important; font-size: 14px !important; }
+            .tl-year { font-size: 26px !important; }
+
+            .team-grid { grid-template-columns: 1fr 1fr !important; gap: 16px !important; margin-top: 30px !important; }
+
+            .about-cta { padding: 60px 20px !important; }
+            .about-cta h2 { font-size: clamp(30px, 7vw, 56px) !important; }
+
+            /* Values section */
+            section[style*="padding: 100px 40px"] { padding: 60px 20px !important; }
+        }
+        @media (max-width: 480px) {
+            .values-grid { grid-template-columns: 1fr !important; }
+            .team-grid { grid-template-columns: 1fr !important; }
+            .stats-strip { grid-template-columns: 1fr 1fr !important; gap: 20px !important; }
+        }
     </style>
 </head>
 <body>
