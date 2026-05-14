@@ -107,14 +107,14 @@
     ════════════════════════════════ */
     .hp-hero {
         height: auto !important;
-        min-height: 100svh !important;
+        min-height: 85svh !important;
         overflow: hidden !important;
     }
 
     /* Orange stripe — move up so less teal above it */
     .hp-bg-stripe {
-        height: 38vh !important;
-        top: 36% !important;
+        height: 32vh !important;
+        top: 40% !important;
         transform: translateY(-50%) !important;
     }
 
@@ -122,7 +122,7 @@
     .hp-big-text {
         display: flex !important;
         font-size: clamp(48px, 15vw, 80px) !important;
-        top: 36% !important;
+        top: 40% !important;
         gap: 0 !important;
         letter-spacing: -1px !important;
         width: 100% !important;
@@ -131,15 +131,15 @@
 
     /* Dog canvas — properly centered & sized */
     .hp-center-dog {
-        width: 260px !important;
-        height: 260px !important;
-        top: 36% !important;
+        width: 320px !important;
+        height: 320px !important;
+        top: 40% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
     }
     .hp-center-dog canvas {
-        width: 260px !important;
-        height: 260px !important;
+        width: 320px !important;
+        height: 320px !important;
     }
 
     /* Floating decorative shapes — hide on mobile */
