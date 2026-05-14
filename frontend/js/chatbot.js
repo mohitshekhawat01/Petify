@@ -317,7 +317,7 @@
         const row = document.createElement('div');
         row.className = 'p-msg-row user';
         row.innerHTML = `
-            <div>
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-end;">
                 <div class="p-bubble">${esc(text)}</div>
                 <div class="p-time">${now()}</div>
             </div>
@@ -333,7 +333,7 @@
             .replace(/\n/g, '<br>');
         row.innerHTML = `
             <div class="p-avatar">🐾</div>
-            <div>
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
                 <div class="p-bubble">${html}</div>
                 <div class="p-time">${now()}</div>
             </div>`;
