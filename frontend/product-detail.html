@@ -316,13 +316,15 @@
 
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
-            .pdp-section { grid-template-columns: 1fr !important; padding: 100px 20px 60px !important; gap: 30px !important; }
+            .pdp-section { padding: 100px 20px 60px !important; }
+            .pdp-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
             .pdp-gallery-col, .pdp-info-col { width: 100% !important; }
             .pdp-thumbs { flex-direction: row !important; overflow-x: auto !important; }
             .pdp-title { font-size: clamp(24px, 6vw, 40px) !important; }
             .pdp-price { font-size: clamp(28px, 7vw, 40px) !important; }
             .pdp-actions { flex-direction: column !important; }
-            .pdp-actions .btn-primary { width: 100% !important; }
+            .pdp-actions .pdp-add-btn { width: 100% !important; }
+            .pdp-media { position: relative !important; top: 0 !important; }
         }
     </style>
 </head>
